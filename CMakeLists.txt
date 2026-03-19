@@ -13,6 +13,7 @@ function(add_kernel_arch ARCH_NAME ARCH_DIR PLATFORM_FLAGS)
     set(SOURCES
         "${ARCH_SRC_BOOT_DIR}/startup.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/boot/main.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/syscalls.c"
     )
     add_executable(${ARCH_NAME} ${SOURCES})
 
