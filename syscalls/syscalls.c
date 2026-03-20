@@ -3,9 +3,12 @@
 #include <syscalls/syscalls.h>
 #include <mem/mem.h>
 
+// ======== DEFAULT SUBROUTINES ========
+void Kernel_Syscalls(uint32_t *saved_args);
+
 void Kernel_Syscalls(uint32_t *saved_args)
 {
-    Kernel_SyscallNumber syscall_number = saved_args[4];
+    Kernel_SyscallNumber syscall_number = saved_args[4]; // R12
     if (SCN_CALLS_LENGTH <= syscall_number)
         return;
 

@@ -3,29 +3,27 @@
 #include <mem_routines.h>
 #include <mem/mem.h>
 
-// TODO: Remove this defines into owners manager
-//=====DEFINES=====
+// TODO: Move this defines into owners manager
+// ============== DEFINES ==============
 #define NO_OWNER      0
 #define KERNEL_OWNER  1
 
-//=====TYPEDEFS====
+// ============= TYPEDEFS ==============
 typedef struct
 {
     uint16_t block_num;
     uint16_t owner_id;
     uint16_t permissions;
-
     uint16_t reserved;
 } Kernel_MemoryPage;
 
 // ======== STATIC SUBROUTINES =========
 static uint16_t Memory_FindFirstFreeBlock(uint16_t required_pages);
 static void Memory_BlockChangeOwnerID(uint16_t first_page, uint16_t required_pages, uint16_t required_id);
+static uint16_t Memory_GetBlockPagesCount(uint16_t requester_id, uint16_t first_page);
 
-// ======== DEFAULT SUBROUTINES ========
-// NONE
-
-//=====GLOBAL VARS=====
+// ============ GLOBAL VARS ============
+__attribute__((section(".kernel_bss")))
 Kernel_MemoryPage pages[MEM_PAGES_COUNT];
 
 // Changes OwnerID for requested amount of pages
@@ -50,11 +48,27 @@ static uint16_t Memory_FindFirstFreeBlock(uint16_t required_pages)
 
         if (free_pages >= required_pages)
         {
-            end_of_seq = i;
+            end_of_seq = i + 1;
             break;
         }
     }
+    // Why extra space is here?
+    // bcz idgf
     return ( 0 != end_of_seq) ? end_of_seq - free_pages : 0;
+}
+
+// Counts pages allocated/binded to block
+static uint16_t Memory_GetBlockPagesCount(uint16_t requester_id, uint16_t first_page)
+{
+    uint16_t pages_count = 0, current_page = first_page;
+
+    while (pages[current_page].owner_id == requester_id)
+    {
+        current_page++;
+        pages_count++;
+    }
+
+    return pages_count;
 }
 
 // Initializes array of pages
@@ -69,7 +83,7 @@ void Memory_Initialize(void)
 }
 
 // Allocates memory with req size
-void *Memory_Allocate(uint16_t owner_id, uint32_t bytes_len)
+void *Memory_Allocate(uint16_t requester_id, uint32_t bytes_len)
 {
     uint16_t required_pages = bytes_len / MEM_PAGE_SIZE_IN_BYTES +
         bytes_len % MEM_PAGE_SIZE_IN_BYTES ? 1 : 0;
@@ -79,14 +93,29 @@ void *Memory_Allocate(uint16_t owner_id, uint32_t bytes_len)
     if (0 == block_begin_page)
         return NULL;
 
-    Memory_BlockChangeOwnerID(block_begin_page, required_pages, owner_id);
+    Memory_BlockChangeOwnerID(block_begin_page, required_pages, requester_id);
 
     return (void *)(MEM_BASE_ADDRESS + block_begin_page * MEM_PAGE_SIZE_IN_BYTES);
 }
 
-// Frees early allocated block of memory
-void Memory_Free(uint16_t owner_id, void *block)
+// SVC
+//
+// Handler:
+// id = DetectID()
+// Memory_Free(id, args[0])
+
+// Frees early allocated block of memory with specified OwnerID
+void Memory_Free(uint16_t requester_id, void *block)
 {
-    (void)(owner_id);
-    (void)(block);
+    uint16_t i, first_page = (uint32_t)block / MEM_PAGE_SIZE_IN_BYTES;
+    uint16_t pages_count = Memory_GetBlockPagesCount(requester_id, first_page);
+
+    if (0 == pages_count)
+        return;
+
+    for (i = first_page; i < first_page + pages_count; i++)
+    {
+        pages[i].owner_id = 0;
+        pages[i].permissions = 0;
+    }
 }

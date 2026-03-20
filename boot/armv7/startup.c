@@ -1,16 +1,46 @@
 #include <stdint.h>
 
-extern void Kernel_Syscalls(uint32_t *saved_args);
+extern uint32_t _sidata;
+extern uint32_t _sdata;
+extern uint32_t _edata;
+extern uint32_t _sbss;
+extern uint32_t _ebss;
+
 extern int Kernel_EntryPoint(void);
+extern void Kernel_Syscalls(uint32_t *saved_args);
 
 void Platform_ResetHandler(void)
 {
+    uint32_t *src, *dest;
+
+    // Copy initialized data
+    src = &_sidata;
+    dest = &_sdata;
+    while (dest < &_edata)
+    {
+        *dest++ = *src++;
+    }
+
+    // Fill with zeros non-initialized data
+    dest = &_sbss;
+    while (dest < &_ebss)
+    {
+        *dest++ = 0;
+    }
+
     Kernel_EntryPoint();
 }
 
-void Platform_SVCHandler(uint32_t *saved_args)
+__attribute__((naked))
+void Platform_SVCHandler(void)
 {
-    Kernel_Syscalls(saved_args);
+    __asm__ volatile (
+        "tst    lr, #4\n"
+        "ite    eq\n"
+        "mrseq  r0, msp\n"
+        "mrsne  r0, psp\n"
+        "b      Kernel_Syscalls\n"
+    );
 }
 
 __attribute__ ((section(".isr_vector")))

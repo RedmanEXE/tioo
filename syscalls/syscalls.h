@@ -27,6 +27,8 @@ typedef enum
 uint32_t Kernel_Read();
 uint32_t Kernel_Write();
 
+void *SysMemory_Allocate(uint16_t owner_id, uint32_t size);
+
 uint32_t Service_Register();
 
 #endif //TIOO_SYSCALLS_H_
