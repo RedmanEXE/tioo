@@ -2,7 +2,7 @@
 #define TIOO_SYSCALL_MECHANICS_H_
 
 #include <stdint.h>
-#include <syscalls.h>
+#include <syscalls/syscalls.h>
 
 inline uint32_t Platform_SyscallInvoke(Kernel_SyscallNumber num, uint32_t arg0, uint32_t arg1,
                                             uint32_t arg2, uint32_t arg3) {

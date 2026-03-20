@@ -4,11 +4,12 @@ project("TiOO" C ASM)
 set(CMAKE_C_STANDARD 90)
 
 function(add_kernel_arch ARCH_NAME ARCH_DIR PLATFORM_FLAGS)
-    set(ARCH_SRC_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/${ARCH_DIR}")
-    set(ARCH_SRC_BOOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/boot/${ARCH_DIR}")
-    set(ARCH_SRC_SYSCALLS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/${ARCH_DIR}")
+    set(ARCH_SRC_BUILD_DIR      "${CMAKE_CURRENT_SOURCE_DIR}/build/${ARCH_DIR}")
+    set(ARCH_SRC_BOOT_DIR       "${CMAKE_CURRENT_SOURCE_DIR}/boot/${ARCH_DIR}")
+    set(ARCH_SRC_MEM_DIR        "${CMAKE_CURRENT_SOURCE_DIR}/mem/${ARCH_DIR}")
+    set(ARCH_SRC_SYSCALLS_DIR   "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/${ARCH_DIR}")
     # Setup for linker script
-    set(LINKER_SCRIPT "${ARCH_SRC_BUILD_DIR}/linker.ld")
+    set(LINKER_SCRIPT           "${ARCH_SRC_BUILD_DIR}/linker.ld")
 
     # Setup for sources
     set(SOURCES
@@ -17,6 +18,7 @@ function(add_kernel_arch ARCH_NAME ARCH_DIR PLATFORM_FLAGS)
         "${CMAKE_CURRENT_SOURCE_DIR}/boot/main.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/syscalls.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/api.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/mem/mem.c"
     )
     add_executable(${ARCH_NAME} ${SOURCES})
 
@@ -37,9 +39,11 @@ function(add_kernel_arch ARCH_NAME ARCH_DIR PLATFORM_FLAGS)
     )
 
     target_include_directories(${ARCH_NAME} PRIVATE
-        "${CMAKE_CURRENT_SOURCE_DIR}/syscalls"
+        ${CMAKE_CURRENT_SOURCE_DIR}
+
         ${ARCH_SRC_BOOT_DIR}
         ${ARCH_SRC_BUILD_DIR}
+        ${ARCH_SRC_MEM_DIR}
         ${ARCH_SRC_SYSCALLS_DIR}
     )
 

@@ -8,7 +8,7 @@ typedef enum
     SCN_KERNEL_READ             = 0,
     SCN_KERNEL_WRITE            = 1,
 
-    SCN_EXECUTABLE_LOAD         = 2,
+    SCN_EXECUTABLE_EXEC         = 2,
     SCN_EXECUTABLE_EXIT         = 3,
 
     SCN_SERVICE_REGISTER        = 4,
@@ -17,6 +17,9 @@ typedef enum
     SCN_SERVICE_LIST            = 7,
 
     SCN_SERVICE_CALL_SERVICE    = 8,
+
+    SCN_MEMORY_ALLOCATE         = 9,
+    SCN_MEMORY_FREE             = 10,
 
     SCN_CALLS_LENGTH,
 } Kernel_SyscallNumber;

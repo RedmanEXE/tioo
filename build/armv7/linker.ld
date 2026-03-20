@@ -12,6 +12,18 @@ SECTIONS
 	{
 		KEEP(*(.isr_vector))
 		*(.text)
+		*(.text.*)
 		*(.rodata)
 	} >FLASH
+
+	.data :
+	{
+	    *(.data)
+	    *(.data*)
+	} >RAM
+
+	.bss :
+	{
+	    *(.bss)
+	} >RAM
 }
