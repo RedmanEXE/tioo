@@ -1,6 +1,13 @@
+#include <syscalls.h>
+
 int Kernel_EntryPoint(void)
 {
-    while (1) {}
+    Service_Register();
+
+    while (1)
+    {
+        
+    }
 
     return 0;
 }

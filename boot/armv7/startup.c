@@ -1,10 +1,6 @@
-//
-// Created by REXE on 18.03.26.
-//
-
 #include <stdint.h>
 
-extern void Kernel_SyscallHandler(uint32_t *saved_args);
+extern void Kernel_Syscalls(uint32_t *saved_args);
 extern int Kernel_EntryPoint(void);
 
 void Platform_ResetHandler(void)
@@ -14,7 +10,7 @@ void Platform_ResetHandler(void)
 
 void Platform_SVCHandler(uint32_t *saved_args)
 {
-    Kernel_SyscallHandler(saved_args);
+    Kernel_Syscalls(saved_args);
 }
 
 __attribute__ ((section(".isr_vector")))

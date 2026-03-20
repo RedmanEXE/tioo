@@ -1,4 +1,4 @@
-ENTRY(Kernel_ResetHandler)
+ENTRY(Platform_ResetHandler)
 
 MEMORY
 {
