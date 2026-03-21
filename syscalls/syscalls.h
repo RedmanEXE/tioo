@@ -28,6 +28,7 @@ uint32_t Kernel_Read();
 uint32_t Kernel_Write();
 
 void *SysMemory_Allocate(uint16_t owner_id, uint32_t size);
+void SysMemory_Free(uint16_t owner_id, void *ptr);
 
 uint32_t Service_Register();
 

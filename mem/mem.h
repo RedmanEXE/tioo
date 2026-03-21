@@ -11,7 +11,7 @@
 #define MEM_PAGES_COUNT             (uint16_t)(MEM_SIZE_IN_BYTES / MEM_PAGE_SIZE_IN_BYTES)
 
 // Internal defines for kernel RAM
-#define MEM_KERNEL_PAGES_COUNT      ((uint16_t)8)
+#define MEM_KERNEL_PAGES_COUNT      ((uint16_t)8 - (MEM_STACK_SIZE_IN_BYTES / MEM_PAGE_SIZE_IN_BYTES))
 #define MEM_KERNEL_SIZE_IN_BYTES    (MEM_KERNEL_PAGES_COUNT * MEM_PAGE_SIZE_IN_BYTES)
 
 // ======== DEFAULT SUBROUTINES ========

@@ -47,3 +47,9 @@ inline void *SysMemory_Allocate(uint16_t owner_id, uint32_t size)
 {
     return (void *)Platform_SyscallInvoke(SCN_MEMORY_ALLOCATE, owner_id, size, 0, 0);
 }
+
+// later
+inline void SysMemory_Free(uint16_t owner_id, void *ptr)
+{
+    Platform_SyscallInvoke(SCN_MEMORY_FREE, owner_id, (uint32_t)ptr, 0, 0);
+}

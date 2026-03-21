@@ -14,6 +14,7 @@ function(add_kernel_arch ARCH_NAME ARCH_DIR PLATFORM_FLAGS)
     # Setup for sources
     set(SOURCES
         "${ARCH_SRC_BOOT_DIR}/startup.c"
+        "${ARCH_SRC_SYSCALLS_DIR}/syscall_handler.s"
 
         "${CMAKE_CURRENT_SOURCE_DIR}/boot/main.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/syscalls.c"

@@ -20,6 +20,9 @@ void Kernel_Syscalls(uint32_t *saved_args)
         case SCN_MEMORY_ALLOCATE:
             saved_args[0] = (uint32_t)Memory_Allocate((uint16_t)saved_args[0], saved_args[1]);
             break;
+        case SCN_MEMORY_FREE:
+            Memory_Free((uint16_t)saved_args[0], (void *)saved_args[1]);
+            break;
         default:
             break;
     }

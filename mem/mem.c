@@ -85,6 +85,7 @@ void Memory_Initialize(void)
 // Allocates memory with req size
 void *Memory_Allocate(uint16_t requester_id, uint32_t bytes_len)
 {
+    // FIXME: Memory need to be allocated with 2^n size and on prop address
     uint16_t required_pages = bytes_len / MEM_PAGE_SIZE_IN_BYTES +
         bytes_len % MEM_PAGE_SIZE_IN_BYTES ? 1 : 0;
 
@@ -95,7 +96,7 @@ void *Memory_Allocate(uint16_t requester_id, uint32_t bytes_len)
 
     Memory_BlockChangeOwnerID(block_begin_page, required_pages, requester_id);
 
-    return (void *)(MEM_BASE_ADDRESS + block_begin_page * MEM_PAGE_SIZE_IN_BYTES);
+    return (void *)(MEM_STACK_TOP_ADDRESS + block_begin_page * MEM_PAGE_SIZE_IN_BYTES);
 }
 
 // SVC
@@ -107,7 +108,8 @@ void *Memory_Allocate(uint16_t requester_id, uint32_t bytes_len)
 // Frees early allocated block of memory with specified OwnerID
 void Memory_Free(uint16_t requester_id, void *block)
 {
-    uint16_t i, first_page = (uint32_t)block / MEM_PAGE_SIZE_IN_BYTES;
+    uint16_t i, first_page = ((uint32_t)block - MEM_STACK_TOP_ADDRESS) / MEM_PAGE_SIZE_IN_BYTES;
+    // FIXME: Block size counts without <block, only block>=
     uint16_t pages_count = Memory_GetBlockPagesCount(requester_id, first_page);
 
     if (0 == pages_count)

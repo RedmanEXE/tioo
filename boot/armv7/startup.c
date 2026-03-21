@@ -6,6 +6,8 @@ extern uint32_t _edata;
 extern uint32_t _sbss;
 extern uint32_t _ebss;
 
+extern void Platform_SVCHandler(void);
+
 extern int Kernel_EntryPoint(void);
 extern void Kernel_Syscalls(uint32_t *saved_args);
 
@@ -29,18 +31,6 @@ void Platform_ResetHandler(void)
     }
 
     Kernel_EntryPoint();
-}
-
-__attribute__((naked))
-void Platform_SVCHandler(void)
-{
-    __asm__ volatile (
-        "tst    lr, #4\n"
-        "ite    eq\n"
-        "mrseq  r0, msp\n"
-        "mrsne  r0, psp\n"
-        "b      Kernel_Syscalls\n"
-    );
 }
 
 __attribute__ ((section(".isr_vector")))

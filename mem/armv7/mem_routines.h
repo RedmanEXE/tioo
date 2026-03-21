@@ -6,5 +6,6 @@
 #define TIOO_MEM_ROUTINES_H_
 
 #define MEM_BASE_ADDRESS            0x20000000
+#define MEM_STACK_TOP_ADDRESS       0x20001000
 
 #endif //TIOO_MEM_ROUTINES_H_
