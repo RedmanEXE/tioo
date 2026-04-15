@@ -1,0 +1,27 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "ch32v30x-rv32i",
+            "displayName": "CH32V30x (RISC-V 32I)",
+            "toolchainFile": "cmake/rv32i/toolchain.cmake",
+            "binaryDir": "cache/ch32v30x",
+            "cacheVariables": {
+                "MCU_DIR": "ch32v30x",
+                "ARCH_DIR": "rv32i",
+                "PLATFORM_FLAGS": "-march=rv32imafc -mabi=ilp32f -msmall-data-limit=8"
+            }
+        },
+        {
+            "name": "stm32f4-armv7",
+            "displayName": "STM32F4 (ARMv7)",
+            "toolchainFile": "cmake/armv7/toolchain.cmake",
+            "binaryDir": "cache/stm32f4",
+            "cacheVariables": {
+                "MCU_DIR": "stm32f4",
+                "ARCH_DIR": "armv7",
+                "PLATFORM_FLAGS": "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16"
+            }
+        }
+    ]
+}

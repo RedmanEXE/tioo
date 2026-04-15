@@ -1,9 +1,10 @@
 #include <stdint.h>
+#include <stddef.h>
 
 #include <mem_routines.h>
 #include <mem/mem.h>
 
-// TODO: Move this defines into owners manager
+// TODO: Move this defines into OwnersManager
 // ============== DEFINES ==============
 #define NO_OWNER      0
 #define KERNEL_OWNER  1
@@ -15,7 +16,7 @@ typedef struct
     uint16_t owner_id;
     uint16_t permissions;
     uint16_t reserved;
-} Kernel_MemoryPage;
+} Memory_Page;
 
 // ======== STATIC SUBROUTINES =========
 static uint16_t Memory_FindFirstFreeBlock(uint16_t required_pages);
@@ -24,7 +25,7 @@ static uint16_t Memory_GetBlockPagesCount(uint16_t requester_id, uint16_t first_
 
 // ============ GLOBAL VARS ============
 __attribute__((section(".kernel_bss")))
-Kernel_MemoryPage pages[MEM_PAGES_COUNT];
+Memory_Page pages[MEM_PAGES_COUNT];
 
 // Changes OwnerID for requested amount of pages
 static void Memory_BlockChangeOwnerID(uint16_t first_page, uint16_t required_pages, uint16_t required_id)
@@ -110,6 +111,7 @@ void Memory_Free(uint16_t requester_id, void *block)
 {
     uint16_t i, first_page = ((uint32_t)block - MEM_STACK_TOP_ADDRESS) / MEM_PAGE_SIZE_IN_BYTES;
     // FIXME: Block size counts without <block, only block>=
+    // FIXME: There's no check for address bounds
     uint16_t pages_count = Memory_GetBlockPagesCount(requester_id, first_page);
 
     if (0 == pages_count)
