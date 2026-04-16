@@ -26,10 +26,12 @@ int Kernel_EntryPoint(void)
 
     Memory_Initialize();
 
+    // Test field
     void *point = SysMemory_Allocate(2, 1000);
     void *point2 = SysMemory_Allocate(2, 1000);
     SysMemory_Free(2, point);
     (void)point2;
+    // END: Test field
 
     while (1) {}
 

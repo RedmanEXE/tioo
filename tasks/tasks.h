@@ -1,11 +1,9 @@
-//
-// Created by REXE on 21.03.26.
-//
-
 #ifndef TIOO_TASKS_H_
 #define TIOO_TASKS_H_
 
 #include <stdint.h>
+
+#include <task_data.h>
 
 #define TASKS_MAX_COUNT                 64
 
@@ -18,13 +16,20 @@ typedef struct Task_Item
     Platform_TaskData platform_data;
 
     struct Task_Item *next_for_program;
-    struct Task_Item *next_for_scheduler;
+    struct Task_Item *next_for_switcher;
 } Task_Item;
 
-__attribute__((section(".kernel_bss")))
-Task_Item tasks[TASKS_MAX_COUNT];
+typedef struct
+{
+    Task_Item *curr_task;
+} TasksManager;
 
-int32_t Task_Create(void*(*func)(void*), void* arg);
+extern Task_Item tasks[TASKS_MAX_COUNT];
+extern TasksManager tasks_manager;
+
+int32_t Task_Create(void *(*func)(void *), void *arg);
 int32_t Task_Kill(int32_t id);
+
+void *TasksManager_Switch(void *sp_to_save);
 
 #endif //TIOO_TASKS_H_
