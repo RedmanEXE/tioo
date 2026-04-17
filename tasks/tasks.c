@@ -87,6 +87,7 @@ int32_t Task_Free(int32_t task_id)
     }
 
     // TODO: Check how we can free stack block after kill
+    // and check mem.c
     // Memory_Free(task_id, task->stack_ptr);
     TasksManager_RemoveFromQueue(&tasks_manager, task);
 
