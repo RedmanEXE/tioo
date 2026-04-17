@@ -12,14 +12,13 @@
 
 typedef struct
 {
-    int32_t id;
-    Platform_ProgramData platform_data;
+    uint16_t id;
+    // Platform_ProgramData platform_data;
 
     Task_Item *first_task;
 } Program_Item;
 
-__attribute__((section(".kernel_bss")))
-Program_Item programs[PROGRAMS_MAX_COUNT];
+extern Program_Item programs[PROGRAMS_MAX_COUNT];
 
 int32_t Program_Create(void*(*func)(void*), void* arg);
 int32_t Program_Terminate(int32_t id);

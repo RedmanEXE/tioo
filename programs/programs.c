@@ -2,6 +2,8 @@
 
 #include "programs.h"
 
+__attribute__((section(".kernel_bss"))) Program_Item programs[PROGRAMS_MAX_COUNT];
+
 Program_Item *Program_FindEmptySlot()
 {
     int32_t i;
@@ -24,7 +26,7 @@ int32_t Program_Create(void*(*func)(void*), void* arg)
         return -1;
 
     int32_t task_id = Task_Create(func, arg);
-    empty_slot->first_task = Task_Find(task_id);
+    empty_slot->first_task = Task_GetTaskAddress(task_id);
 
     empty_slot->id = 2;
 
