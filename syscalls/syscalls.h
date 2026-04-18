@@ -21,6 +21,9 @@ typedef enum
     SCN_MEMORY_ALLOCATE         = 9,
     SCN_MEMORY_FREE             = 10,
 
+    SCN_TASK_CREATE             = 11,
+    SCN_TASK_LAUNCH             = 12,
+
     SCN_CALLS_LENGTH,
 } Kernel_SyscallNumber;
 
@@ -29,6 +32,8 @@ uint32_t Kernel_Write();
 
 void *SysMemory_Allocate(uint16_t owner_id, uint32_t size);
 void SysMemory_Free(uint16_t owner_id, void *ptr);
+int32_t SysTask_Create(uint16_t program_id, void *(*func)(void *), void *arg);
+int32_t SysTask_Launch(uint16_t task_id);
 
 uint32_t Service_Register();
 

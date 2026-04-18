@@ -2,8 +2,8 @@
 
 #include <stddef.h>
 
-#include "mem/mem.h"
-#include "programs/programs.h"
+#include <mem/mem.h>
+#include <programs/programs.h>
 
 extern void *Platform_CreateTaskContext(void *stack_ptr, void *(*func)(void *), void *arg);
 extern void Platform_ScheduleTaskSwitch();
@@ -24,19 +24,26 @@ static Task_Item *Task_FindFirstFreeStruct()
     return item;
 }
 
-int32_t Task_Create(void *(*func)(void *), void *arg, uint32_t stack_size)
+Task_Item *Task_GetTaskAddress(uint16_t task_id)
+{
+    return &tasks[task_id];
+}
+
+int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint32_t stack_size)
 {
     Task_Item *task = Task_FindFirstFreeStruct();
     if (NULL == task)
         return -1;
 
-    // TODO: Create for memory allocation as program and as task
+    task->program_owner_id = program_id;
+
+    // TODO: Create memory allocation as a program and as a task
     // - All tasks can access program's memory (data)
     // - Every task can access only their memory (stack)
     void *stack_ptr = Memory_Allocate(task->id, stack_size) + stack_size;
 
     // TODO: Create MPU/PMP setup
-    // Platform_SetupMPUContext()
+    // Platform_SetupMemoryProtectionContext()
 
     task->stack_ptr = Platform_CreateTaskContext(stack_ptr, func, arg);
     task->launch_state = TASK_LAUNCH_STATE_SUSPENDED;
@@ -46,9 +53,9 @@ int32_t Task_Create(void *(*func)(void *), void *arg, uint32_t stack_size)
     return task->id;
 }
 
-int32_t Task_Launch(int32_t task_id)
+int32_t Task_Launch(uint16_t task_id)
 {
-    if (0 > task_id || TASKS_MAX_COUNT <= task_id)
+    if (TASKS_MAX_COUNT <= task_id)
         return -1;
 
     Task_Item *task = &tasks[task_id];
@@ -73,22 +80,23 @@ int32_t Task_Kill(uint16_t task_id)
     return 0;
 }
 
-int32_t Task_Free(int32_t task_id)
+int32_t Task_Free(uint16_t task_id)
 {
     if (TASKS_MAX_COUNT <= task_id)
         return -1;
 
     Task_Item *task = &tasks[task_id];
     if (TASK_LAUNCH_STATE_SUSPENDED != task->launch_state)
-    {
-        int32_t kill_status = Task_Kill(task_id);
-        if (0 != kill_status)
-            return kill_status;
-    }
+        return -2;
 
-    // TODO: Check how we can free stack block after kill
-    // and check mem.c
-    // Memory_Free(task_id, task->stack_ptr);
+    if (tasks_manager.curr_task->id == task->id)
+        return -3;
+
+    // FIXME: Check Memory_Free in mem/mem.c
+    Memory_Free(task_id, task->stack_ptr);
+    task->stack_ptr = NULL;
+    task->program_owner_id = PROGRAMS_ID_EMPTY;
+
     TasksManager_RemoveFromQueue(&tasks_manager, task);
 
     return 0;

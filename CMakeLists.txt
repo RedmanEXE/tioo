@@ -17,6 +17,7 @@ set(SOURCES
     "${ARCH_SRC_BOOT_DIR}/startup.S"
     "${ARCH_SRC_SYSCALLS_DIR}/syscall_handler.S"
     "${ARCH_SRC_TASKS_DIR}/context.S"
+    "${ARCH_SRC_TASKS_DIR}/manager.S"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/boot/main.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/syscalls.c"

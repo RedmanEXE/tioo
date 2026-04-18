@@ -23,6 +23,8 @@ inline uint32_t Kernel_Read(uint32_t descriptor, char *buffer);
 inline uint32_t Kernel_Write(uint32_t descriptor, const char *buffer);
 inline uint32_t Service_Register();
 inline void *SysMemory_Allocate(uint16_t owner_id, uint32_t size);
+inline int32_t SysTask_Create(uint16_t program_id, void *(*func)(void *), void *arg);
+inline int32_t SysTask_Launch(uint16_t task_id);
 
 // later
 inline uint32_t Kernel_Read(uint32_t descriptor, char *buffer)
@@ -53,3 +55,17 @@ inline void SysMemory_Free(uint16_t owner_id, void *ptr)
 {
     Platform_SyscallInvoke(SCN_MEMORY_FREE, owner_id, (uint32_t)ptr, 0, 0);
 }
+
+// later
+inline int32_t SysTask_Create(uint16_t program_id, void *(*func)(void *), void *arg)
+{
+    return (int32_t)Platform_SyscallInvoke(SCN_TASK_CREATE, (uint32_t)program_id, (uint32_t)func, (uint32_t)arg, 0);
+}
+
+// later
+inline int32_t SysTask_Launch(uint16_t task_id)
+{
+    return (int32_t)Platform_SyscallInvoke(SCN_TASK_LAUNCH, (uint32_t)task_id, 0, 0, 0);
+}
+
+

@@ -5,6 +5,7 @@
 
 #include <task_data.h>
 
+#define TASK_DEFAULT_STACK_SIZE             1024
 #define TASKS_MAX_COUNT                     64
 
 typedef enum
@@ -17,6 +18,7 @@ typedef enum
 typedef struct __attribute__((packed, aligned(4))) Task_Item
 {
     uint16_t id;
+    uint16_t program_owner_id;
     // uint32_t priority;
     Task_LaunchState launch_state;
 
@@ -41,8 +43,11 @@ typedef struct
 extern Task_Item tasks[TASKS_MAX_COUNT];
 extern TasksManager tasks_manager;
 
-int32_t Task_Create(void *(*func)(void *), void *arg, uint32_t stack_size);
+int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint32_t stack_size);
+int32_t Task_Launch(uint16_t task_id);
 int32_t Task_Kill(uint16_t id);
+int32_t Task_Free(uint16_t task_id);
+Task_Item *Task_GetTaskAddress(uint16_t task_id);
 
 void TasksManager_AddToQueue(TasksManager *manager, Task_Item *task_to_add);
 void TasksManager_RemoveFromQueue(TasksManager *manager, Task_Item *task_to_remove);

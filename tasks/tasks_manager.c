@@ -57,7 +57,7 @@ void *TasksManager_Switch(void *sp_to_save)
     Task_Item *task = TasksManager_FindNextTask(tasks_manager.curr_task);
 
     tasks_manager.curr_task->stack_ptr = sp_to_save;
-    tasks_manager.curr_task = task;
 
+    tasks_manager.curr_task = task;
     return tasks_manager.curr_task->stack_ptr;
 }

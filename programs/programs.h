@@ -21,6 +21,6 @@ typedef struct
 extern Program_Item programs[PROGRAMS_MAX_COUNT];
 
 int32_t Program_Create(void*(*func)(void*), void* arg);
-int32_t Program_Terminate(int32_t id);
+int32_t Program_Terminate(uint16_t id);
 
 #endif //TIOO_PROGRAMS_H_

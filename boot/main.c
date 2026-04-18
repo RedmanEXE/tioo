@@ -1,11 +1,24 @@
+#include <stddef.h>
+
 #include <syscalls/syscalls.h>
 #include <mem/mem.h>
+
+#include "programs/programs.h"
 
 extern uint32_t _sidata;
 extern uint32_t _sdata;
 extern uint32_t _edata;
 extern uint32_t _sbss;
 extern uint32_t _ebss;
+
+void *task_rountine(void *arg)
+{
+    (void)arg;
+
+    while (1) {}
+
+    return NULL;
+}
 
 // Thorfinn says:
 // main file huli tut pisat'
@@ -32,6 +45,9 @@ int Kernel_EntryPoint(void)
     SysMemory_Free(2, point);
     (void)point2;
     // END: Test field
+
+    uint16_t task1_id = SysTask_Create(PROGRAMS_ID_KERNEL, task_rountine, NULL);
+    SysTask_Launch(task1_id);
 
     while (1) {}
 

@@ -4,7 +4,7 @@
 
 __attribute__((section(".kernel_bss"))) Program_Item programs[PROGRAMS_MAX_COUNT];
 
-Program_Item *Program_FindEmptySlot()
+static Program_Item *Program_FindEmptySlot()
 {
     int32_t i;
     Program_Item *empty_slot = NULL;
@@ -25,10 +25,17 @@ int32_t Program_Create(void*(*func)(void*), void* arg)
     if (NULL == empty_slot)
         return -1;
 
-    int32_t task_id = Task_Create(func, arg);
-    empty_slot->first_task = Task_GetTaskAddress(task_id);
-
     empty_slot->id = 2;
 
-    return 2;
+    int32_t task_id = Task_Create(empty_slot->id, func, arg, TASK_DEFAULT_STACK_SIZE);
+    empty_slot->first_task = Task_GetTaskAddress(task_id);
+
+    Task_Launch(task_id);
+
+    return empty_slot->id;
 }
+
+// int32_t Program_Terminate(uint16_t id)
+// {
+//     return 0;
+// }
