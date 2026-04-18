@@ -1,6 +1,8 @@
 .thumb
 .syntax unified
 
+.equ        ICSR_ADDR, 0xE000ED04
+
 // Before PendSV handling core does:
 // - Pushes xPSR
 // - Pushes PC, LR

@@ -4,9 +4,7 @@
 #include <stdint.h>
 
 #include <task_data.h>
-
-#define TASK_DEFAULT_STACK_SIZE             1024
-#define TASKS_MAX_COUNT                     64
+#include <settings.h>
 
 typedef enum
 {
@@ -15,7 +13,7 @@ typedef enum
     TASK_LAUNCH_STATE_WAITS_FOR_ANSWERS     = 2,
 } Task_LaunchState;
 
-typedef struct __attribute__((packed, aligned(4))) Task_Item
+typedef struct Task_Item
 {
     uint16_t id;
     uint16_t program_owner_id;

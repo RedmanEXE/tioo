@@ -4,11 +4,10 @@
 #include <stdint.h>
 
 #include <tasks/tasks.h>
+#include <settings.h>
 
 #define PROGRAMS_ID_EMPTY               0
 #define PROGRAMS_ID_KERNEL              1
-
-#define PROGRAMS_MAX_COUNT              32
 
 typedef struct
 {

@@ -6,6 +6,7 @@
 #include <programs/programs.h>
 
 extern void *Platform_CreateTaskContext(void *stack_ptr, void *(*func)(void *), void *arg);
+extern void Platform_CreateMemoryProtectionContext(Platform_TaskData *zone);
 extern void Platform_ScheduleTaskSwitch();
 
 __attribute__((section(".kernel_bss"))) Task_Item tasks[TASKS_MAX_COUNT];
@@ -43,7 +44,7 @@ int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint3
     void *stack_ptr = Memory_Allocate(task->id, stack_size) + stack_size;
 
     // TODO: Create MPU/PMP setup
-    // Platform_SetupMemoryProtectionContext()
+    // Platform_CreateMemoryProtectionContext(&task->platform_data);
 
     task->stack_ptr = Platform_CreateTaskContext(stack_ptr, func, arg);
     task->launch_state = TASK_LAUNCH_STATE_SUSPENDED;

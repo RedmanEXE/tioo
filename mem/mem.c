@@ -3,6 +3,7 @@
 
 #include <mem_routines.h>
 #include <mem/mem.h>
+#include <settings.h>
 
 // TODO: Move this defines into OwnersManager
 // ============== DEFINES ==============

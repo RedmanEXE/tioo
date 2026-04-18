@@ -1,8 +1,6 @@
 .thumb
 .syntax unified
 
-.equ        ICSR_ADDR, 0xE000ED04
-
 .type       Platform_CreateTaskContext, %function
 .global     Platform_CreateTaskContext
 Platform_CreateTaskContext: // (void *stack_ptr, void *(*func)(void *), void *arg);
@@ -29,11 +27,4 @@ Platform_CreateTaskContext: // (void *stack_ptr, void *(*func)(void *), void *ar
     // ...and FPU registers need to be saved
 
     // and return r0 as stack_ptr
-    bx      lr
-
-.type       Platform_CreateMemoryProtectionContext, %function
-.global     Platform_CreateMemoryProtectionContext
-Platform_CreateMemoryProtectionContext: // ()
-    
-
     bx      lr
