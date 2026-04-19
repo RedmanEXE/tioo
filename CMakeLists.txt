@@ -8,6 +8,8 @@ set(ARCH_SRC_BOOT_DIR       "${CMAKE_CURRENT_SOURCE_DIR}/boot/${ARCH_DIR}")
 set(ARCH_SRC_MEM_DIR        "${CMAKE_CURRENT_SOURCE_DIR}/mem/${ARCH_DIR}")
 set(ARCH_SRC_SYSCALLS_DIR   "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/${ARCH_DIR}")
 set(ARCH_SRC_TASKS_DIR      "${CMAKE_CURRENT_SOURCE_DIR}/tasks/${ARCH_DIR}")
+set(ARCH_SRC_TIMERS_DIR     "${CMAKE_CURRENT_SOURCE_DIR}/peripherals/systimer/${ARCH_DIR}")
+set(ARCH_SRC_INTS_DIR       "${CMAKE_CURRENT_SOURCE_DIR}/peripherals/ints/${ARCH_DIR}")
 # Setup for linker script
 set(LINKER_SCRIPT           "${MCU_SRC_BUILD_DIR}/linker.ld")
 
@@ -18,6 +20,8 @@ set(SOURCES
     "${ARCH_SRC_SYSCALLS_DIR}/syscall_handler.S"
     "${ARCH_SRC_TASKS_DIR}/context.S"
     "${ARCH_SRC_TASKS_DIR}/manager.S"
+    "${ARCH_SRC_TIMERS_DIR}/systimer.S"
+    "${ARCH_SRC_INTS_DIR}/controller.S"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/boot/main.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/syscalls.c"
@@ -25,6 +29,7 @@ set(SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/mem/mem.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/tasks/tasks.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/tasks/tasks_manager.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/peripherals/systimer/systimer.c"
 )
 add_executable(Kernel ${SOURCES})
 

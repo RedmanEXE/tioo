@@ -1,5 +1,6 @@
 #include <stddef.h>
 
+#include <peripherals/systimer/systimer.h>
 #include <syscalls/syscalls.h>
 #include <mem/mem.h>
 
@@ -48,6 +49,8 @@ int Kernel_EntryPoint(void)
 
     uint16_t task1_id = SysTask_Create(PROGRAMS_ID_KERNEL, task_rountine, NULL);
     SysTask_Launch(task1_id);
+
+    SystemTimer_InitializeForTaskSwitching();
 
     while (1) {}
 

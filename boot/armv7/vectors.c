@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 extern void Platform_SCHandler(void);
+extern void Platform_SysTimerHandler(void);
 extern void Platform_ResetHandler(void);
 
 extern void Kernel_Syscalls(uint32_t *saved_args);
@@ -19,6 +20,6 @@ uint32_t *isr_vectors[] = {
     (uint32_t *)0,                              // Debug monitor
     (uint32_t *)0,                              // (not used)
     (uint32_t *)0,                              // PendSV interrupt
-    (uint32_t *)0,                              // SysTick interrupt
+    (uint32_t *)Platform_SysTimerHandler,       // SysTick interrupt
     // ...and IRQs
 };

@@ -1,7 +1,7 @@
 .thumb
 .syntax unified
 
-.equ        ICSR_ADDR, 0xE000ED04
+#include    <settings.h>
 
 // Before PendSV handling core does:
 // - Pushes xPSR
@@ -12,6 +12,7 @@
 .type       Platform_PendSVHandler, %function
 .global     Platform_PendSVHandler
 Platform_PendSVHandler: // aka Platform_ContextSwitch
+    push    {lr}
     // We need to save:
     // - R4-R11
     // - S16-S31, if FPU in use
@@ -21,24 +22,23 @@ Platform_PendSVHandler: // aka Platform_ContextSwitch
 
     // Then call switcher and give them stack pointer
     // to save into Task structure
-    push    {lr}
     bl      TasksManager_Switch
-    pop     {lr}
 
     // Restoring another-task(R) context
     // vldmia  r0!, {s16-s31}
     ldmia   r0!, {r4-r11}
     msr     psp, r0
 
+    pop     {lr}
     bx      lr
 
 .type       Platform_ScheduleTaskSwitch, %function
 .global     Platform_ScheduleTaskSwitch
 Platform_ScheduleTaskSwitch: // ()
     // Enable PendSV flag in ICSR
-    ldr     r0, =ICSR_ADDR
+    ldr     r0, =PLATFORM_ICSR_REGISTER
     ldr     r1, [r0]
-    orr     r1, r1, (1 << 28)
+    orr     r1, r1, PLATFORM_ICSR_PENDSV_FLAG
     str     r1, [r0]
 
     // Data Synchronization Barrier

@@ -9,6 +9,10 @@
 #define PROGRAMS_MAX_COUNT                      16
 // END: Programs settings
 
+// Platform registers and internals
+#include "platform_constants.h"
+// END: Platform registers and internals
+
 // Memory settings
 #define MEM_BASE_ADDRESS                        0x20000000
 #define MEM_STACK_TOP_ADDRESS                   0x20000800

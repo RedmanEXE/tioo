@@ -5,9 +5,17 @@
 #ifndef TIOO_SETTINGS_H_
 #define TIOO_SETTINGS_H_
 
+// Interruptions settings
+
+// END: Interruptions settings
+
 // Programs settings
 #define PROGRAMS_MAX_COUNT                      32
 // END: Programs settings
+
+// Platform registers and internals
+#include "platform_constants.h"
+// END: Platform registers and internals
 
 // Memory settings
 #define MEM_BASE_ADDRESS                        0x20000000
@@ -33,5 +41,9 @@
 #define TASK_DEFAULT_STACK_SIZE                 1024
 #define TASKS_MAX_COUNT                         64
 // END: Tasks settings
+
+// SysTimer settings
+
+// END: SysTimer settings
 
 #endif //TIOO_SETTINGS_H_

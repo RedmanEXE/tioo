@@ -27,6 +27,9 @@ void TasksManager_AddToQueue(TasksManager *manager, Task_Item *task_to_add)
     if (NULL != manager->last_task)
         manager->last_task->next_for_switcher = task_to_add;
 
+    if (NULL == manager->curr_task)
+        manager->curr_task = task_to_add;
+
     task_to_add->next_for_switcher = manager->first_task;
     manager->last_task = task_to_add;
 
