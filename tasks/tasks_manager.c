@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 
+extern void Platform_ChangeCurrentContextPointer(void *new_ptr);
+
 __attribute__((section(".kernel_bss"))) TasksManager tasks_manager;
 
 static Task_Item *TasksManager_FindNextTask(Task_Item *curr_task)
@@ -28,7 +30,10 @@ void TasksManager_AddToQueue(TasksManager *manager, Task_Item *task_to_add)
         manager->last_task->next_for_switcher = task_to_add;
 
     if (NULL == manager->curr_task)
+    {
         manager->curr_task = task_to_add;
+        Platform_ChangeCurrentContextPointer(task_to_add->stack_ptr);
+    }
 
     task_to_add->next_for_switcher = manager->first_task;
     manager->last_task = task_to_add;
@@ -53,6 +58,13 @@ void TasksManager_RemoveFromQueue(TasksManager *manager, Task_Item *task_to_remo
         manager->first_task = NULL;
         manager->last_task = NULL;
     }
+}
+
+void TasksManager_Initialize()
+{
+    uint16_t idx;
+    for (idx = 0; idx < TASKS_MAX_COUNT; idx++)
+        tasks[idx].id = idx + 1;
 }
 
 void *TasksManager_Switch(void *sp_to_save)

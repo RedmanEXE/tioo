@@ -12,7 +12,6 @@
 .type       Platform_PendSVHandler, %function
 .global     Platform_PendSVHandler
 Platform_PendSVHandler: // aka Platform_ContextSwitch
-    push    {lr}
     // We need to save:
     // - R4-R11
     // - S16-S31, if FPU in use
@@ -29,7 +28,12 @@ Platform_PendSVHandler: // aka Platform_ContextSwitch
     ldmia   r0!, {r4-r11}
     msr     psp, r0
 
-    pop     {lr}
+    mrs     r0, control
+    orr     r0, r0, #3
+    msr     control, r0
+    isb
+
+    ldr     lr, =0xFFFFFFFD
     bx      lr
 
 .type       Platform_ScheduleTaskSwitch, %function

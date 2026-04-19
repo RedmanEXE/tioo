@@ -12,7 +12,18 @@ extern uint32_t _edata;
 extern uint32_t _sbss;
 extern uint32_t _ebss;
 
-void *task_rountine(void *arg)
+extern void Platform_ScheduleTaskSwitch();
+
+void *task1_routine(void *arg)
+{
+    (void)arg;
+
+    while (1) {}
+
+    return NULL;
+}
+
+void *task2_routine(void *arg)
 {
     (void)arg;
 
@@ -39,16 +50,19 @@ int Kernel_EntryPoint(void)
         *dest++ = 0;
 
     Memory_Initialize();
+    TasksManager_Initialize();
 
     // Test field
     void *point = SysMemory_Allocate(2, 1000);
     void *point2 = SysMemory_Allocate(2, 1000);
     SysMemory_Free(2, point);
     (void)point2;
-    // END: Test field
 
-    uint16_t task1_id = SysTask_Create(PROGRAMS_ID_KERNEL, task_rountine, NULL);
+    uint16_t task1_id = SysTask_Create(PROGRAMS_ID_KERNEL, task1_routine, (void *)1);
     SysTask_Launch(task1_id);
+    uint16_t task2_id = SysTask_Create(PROGRAMS_ID_KERNEL, task2_routine, (void *)2);
+    SysTask_Launch(task2_id);
+    // END: Test field
 
     SystemTimer_InitializeForTaskSwitching();
 

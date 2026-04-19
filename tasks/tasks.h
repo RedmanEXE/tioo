@@ -49,6 +49,7 @@ Task_Item *Task_GetTaskAddress(uint16_t task_id);
 
 void TasksManager_AddToQueue(TasksManager *manager, Task_Item *task_to_add);
 void TasksManager_RemoveFromQueue(TasksManager *manager, Task_Item *task_to_remove);
+void TasksManager_Initialize();
 void *TasksManager_Switch(void *sp_to_save);
 
 #endif //TIOO_TASKS_H_

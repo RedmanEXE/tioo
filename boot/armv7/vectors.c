@@ -1,5 +1,6 @@
 #include <stdint.h>
 
+extern void Platform_PendSVHandler(void);
 extern void Platform_SCHandler(void);
 extern void Platform_SysTimerHandler(void);
 extern void Platform_ResetHandler(void);
@@ -19,7 +20,7 @@ uint32_t *isr_vectors[] = {
     (uint32_t *)Platform_SCHandler,             // SVC interrupt
     (uint32_t *)0,                              // Debug monitor
     (uint32_t *)0,                              // (not used)
-    (uint32_t *)0,                              // PendSV interrupt
+    (uint32_t *)Platform_PendSVHandler,         // PendSV interrupt
     (uint32_t *)Platform_SysTimerHandler,       // SysTick interrupt
     // ...and IRQs
 };

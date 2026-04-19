@@ -5,7 +5,7 @@
 #include <mem/mem.h>
 #include <programs/programs.h>
 
-extern void *Platform_CreateTaskContext(void *stack_ptr, void *(*func)(void *), void *arg);
+extern void *Platform_CreateTaskContext(void *stack_ptr, void *(*func)(void *), void *arg, uint32_t create_with_extras);
 extern void Platform_CreateMemoryProtectionContext(Platform_TaskData *zone);
 extern void Platform_ScheduleTaskSwitch();
 
@@ -16,18 +16,21 @@ static Task_Item *Task_FindFirstFreeStruct()
     int32_t idx;
     Task_Item *item = NULL;
     for (idx = 0; idx < TASKS_MAX_COUNT; idx++)
-        if (NULL == tasks[idx].stack_ptr)
+    {
+        Task_Item *task = Task_GetTaskAddress(idx);
+        if (NULL == task->stack_ptr)
         {
-            item = &tasks[idx];
+            item = task;
             break;
         }
+    }
 
     return item;
 }
 
 Task_Item *Task_GetTaskAddress(uint16_t task_id)
 {
-    return &tasks[task_id];
+    return &tasks[task_id - 1];
 }
 
 int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint32_t stack_size)
@@ -46,7 +49,7 @@ int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint3
     // TODO: Create MPU/PMP setup
     // Platform_CreateMemoryProtectionContext(&task->platform_data);
 
-    task->stack_ptr = Platform_CreateTaskContext(stack_ptr, func, arg);
+    task->stack_ptr = Platform_CreateTaskContext(stack_ptr, func, arg, tasks_manager.curr_task != NULL);
     task->launch_state = TASK_LAUNCH_STATE_SUSPENDED;
 
     TasksManager_AddToQueue(&tasks_manager, task);
@@ -59,7 +62,7 @@ int32_t Task_Launch(uint16_t task_id)
     if (TASKS_MAX_COUNT <= task_id)
         return -1;
 
-    Task_Item *task = &tasks[task_id];
+    Task_Item *task = Task_GetTaskAddress(task_id);
     if (TASK_LAUNCH_STATE_SUSPENDED != task->launch_state)
         return -2;
 
@@ -72,7 +75,7 @@ int32_t Task_Kill(uint16_t task_id)
     if (TASKS_MAX_COUNT <= task_id)
         return -1;
 
-    Task_Item *task = &tasks[task_id];
+    Task_Item *task = Task_GetTaskAddress(task_id);
     task->launch_state = TASK_LAUNCH_STATE_SUSPENDED;
 
     if (tasks_manager.curr_task->id == task->id)
@@ -86,7 +89,7 @@ int32_t Task_Free(uint16_t task_id)
     if (TASKS_MAX_COUNT <= task_id)
         return -1;
 
-    Task_Item *task = &tasks[task_id];
+    Task_Item *task = Task_GetTaskAddress(task_id);
     if (TASK_LAUNCH_STATE_SUSPENDED != task->launch_state)
         return -2;
 
