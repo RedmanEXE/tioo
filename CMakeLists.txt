@@ -27,6 +27,7 @@ set(SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/syscalls.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/syscalls/api.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/mem/mem.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/programs/programs.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/tasks/tasks.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/tasks/tasks_manager.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/peripherals/systimer/systimer.c"

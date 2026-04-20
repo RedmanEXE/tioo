@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 
+#include <programs/programs.h>
+
 extern void Platform_ChangeCurrentContextPointer(void *new_ptr);
 
 __attribute__((section(".kernel_bss"))) TasksManager tasks_manager;
@@ -35,6 +37,7 @@ void TasksManager_AddToQueue(TasksManager *manager, Task_Item *task_to_add)
         Platform_ChangeCurrentContextPointer(task_to_add->stack_ptr);
     }
 
+    task_to_add->prev_for_switcher = manager->last_task;
     task_to_add->next_for_switcher = manager->first_task;
     manager->last_task = task_to_add;
 
@@ -60,7 +63,27 @@ void TasksManager_RemoveFromQueue(TasksManager *manager, Task_Item *task_to_remo
     }
 }
 
-void TasksManager_Initialize()
+void TasksManager_UpdateSleepTimersForTasks()
+{
+    Task_Item *item = tasks_manager.first_task;
+
+    if (NULL == item)
+        return;
+
+    do
+    {
+        if (0 < item->remains_to_sleep)
+        {
+            item->remains_to_sleep--;
+            if (0 == item->remains_to_sleep && TASK_LAUNCH_STATE_BLOCKED == item->launch_state)
+                item->launch_state = TASK_LAUNCH_STATE_LAUNCHED;
+        }
+
+        item = item->next_for_switcher;
+    } while (item != tasks_manager.first_task);
+}
+
+void TasksManager_Initialize(void)
 {
     uint16_t idx;
     for (idx = 0; idx < TASKS_MAX_COUNT; idx++)
@@ -72,7 +95,10 @@ void *TasksManager_Switch(void *sp_to_save)
     Task_Item *task = TasksManager_FindNextTask(tasks_manager.curr_task);
 
     tasks_manager.curr_task->stack_ptr = sp_to_save;
+    Task_SwapStates(tasks_manager.curr_task);
 
     tasks_manager.curr_task = task;
+    Task_SwapStates(task);
+    task->launch_state = TASK_LAUNCH_STATE_RUNNING;
     return tasks_manager.curr_task->stack_ptr;
 }

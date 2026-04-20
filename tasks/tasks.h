@@ -10,7 +10,8 @@ typedef enum
 {
     TASK_LAUNCH_STATE_SUSPENDED             = 0,
     TASK_LAUNCH_STATE_LAUNCHED              = 1,
-    TASK_LAUNCH_STATE_WAITS_FOR_ANSWERS     = 2,
+    TASK_LAUNCH_STATE_RUNNING               = 2,
+    TASK_LAUNCH_STATE_BLOCKED               = 3
 } Task_LaunchState;
 
 typedef struct Task_Item
@@ -18,11 +19,15 @@ typedef struct Task_Item
     uint16_t id;
     uint16_t program_owner_id;
     // uint32_t priority;
-    Task_LaunchState launch_state;
 
-    uint32_t *stack_ptr;
+    Task_LaunchState launch_state;
+    Task_LaunchState post_state;
+    uint32_t remains_to_sleep;
+
+    void *stack_ptr;
     Platform_TaskData platform_data;
 
+    struct Task_Item *prev_for_program;
     struct Task_Item *next_for_program;
 
     struct Task_Item *prev_for_switcher;
@@ -45,7 +50,10 @@ int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint3
 int32_t Task_Launch(uint16_t task_id);
 int32_t Task_Kill(uint16_t id);
 int32_t Task_Free(uint16_t task_id);
+int32_t Task_KickIntoSleep(uint16_t task_id, uint32_t sleep_time);
 Task_Item *Task_GetTaskAddress(uint16_t task_id);
+void Task_SetState(Task_Item *task, Task_LaunchState new_state);
+void Task_SwapStates(Task_Item *task);
 
 void TasksManager_AddToQueue(TasksManager *manager, Task_Item *task_to_add);
 void TasksManager_RemoveFromQueue(TasksManager *manager, Task_Item *task_to_remove);

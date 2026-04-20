@@ -36,6 +36,7 @@ Platform_SysTimerHandler:
     push    {lr}
 
     bl      Platform_ScheduleTaskSwitch
+    bl      TasksManager_UpdateSleepTimersForTasks
 
     pop     {lr}
     bx      lr

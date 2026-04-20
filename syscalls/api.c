@@ -39,12 +39,6 @@ inline uint32_t Kernel_Write(uint32_t descriptor, const char *buffer)
 }
 
 // later
-inline uint32_t Service_Register()
-{
-    return Platform_SyscallInvoke(SCN_SERVICE_REGISTER, 0, 0, 0, 0);
-}
-
-// later
 inline void *SysMemory_Allocate(uint16_t owner_id, uint32_t size)
 {
     return (void *)Platform_SyscallInvoke(SCN_MEMORY_ALLOCATE, owner_id, size, 0, 0);
@@ -57,15 +51,39 @@ inline void SysMemory_Free(uint16_t owner_id, void *ptr)
 }
 
 // later
-inline int32_t SysTask_Create(uint16_t program_id, void *(*func)(void *), void *arg)
+inline int32_t SysProgram_AddTask(uint16_t program_id, void*(*func)(void*), void* arg)
 {
-    return (int32_t)Platform_SyscallInvoke(SCN_TASK_CREATE, (uint32_t)program_id, (uint32_t)func, (uint32_t)arg, 0);
+    return (int32_t)Platform_SyscallInvoke(SCN_PROGRAM_ADD_TASK, (uint32_t)program_id, (uint32_t)func, (uint32_t)arg, 0);
+}
+
+// later
+inline int32_t SysProgram_Execute(void*(*func)(void*), void *arg)
+{
+    return (int32_t)Platform_SyscallInvoke(SCN_PROGRAM_EXECUTE, (uint32_t)func, (uint32_t)arg, 0, 0);
+}
+
+// later
+inline int32_t SysProgram_Terminate(uint16_t program_id)
+{
+    return (int32_t)Platform_SyscallInvoke(SCN_PROGRAM_TERMINATE, (uint32_t)program_id, 0, 0, 0);
 }
 
 // later
 inline int32_t SysTask_Launch(uint16_t task_id)
 {
     return (int32_t)Platform_SyscallInvoke(SCN_TASK_LAUNCH, (uint32_t)task_id, 0, 0, 0);
+}
+
+// later
+inline int32_t SysTask_KickIntoSleep(uint16_t task_id, uint32_t sleep_time)
+{
+    return (int32_t)Platform_SyscallInvoke(SCN_TASK_SLEEP, (uint32_t)task_id, (uint32_t)sleep_time, 0, 0);
+}
+
+// later
+inline int32_t SysTask_Kill(uint16_t task_id)
+{
+    return (int32_t)Platform_SyscallInvoke(SCN_TASK_KILL, (uint32_t)task_id, 0, 0, 0);
 }
 
 

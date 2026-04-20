@@ -13,9 +13,9 @@ __attribute__((section(".kernel_bss"))) Task_Item tasks[TASKS_MAX_COUNT];
 
 static Task_Item *Task_FindFirstFreeStruct()
 {
-    int32_t idx;
+    uint32_t idx;
     Task_Item *item = NULL;
-    for (idx = 0; idx < TASKS_MAX_COUNT; idx++)
+    for (idx = 1; idx <= TASKS_MAX_COUNT; idx++)
     {
         Task_Item *task = Task_GetTaskAddress(idx);
         if (NULL == task->stack_ptr)
@@ -28,9 +28,29 @@ static Task_Item *Task_FindFirstFreeStruct()
     return item;
 }
 
+static uint32_t Task_IsLaunched(Task_Item *task)
+{
+    return task->launch_state == TASK_LAUNCH_STATE_RUNNING || task->launch_state == TASK_LAUNCH_STATE_LAUNCHED;
+}
+
 Task_Item *Task_GetTaskAddress(uint16_t task_id)
 {
     return &tasks[task_id - 1];
+}
+
+void Task_SetState(Task_Item *task, Task_LaunchState new_state)
+{
+    if (tasks_manager.curr_task->id == task->id)
+        task->post_state = new_state;
+    else
+        task->launch_state = new_state;
+}
+
+void Task_SwapStates(Task_Item *task)
+{
+    Task_LaunchState state = task->launch_state;
+    task->launch_state = task->post_state;
+    task->post_state = state;
 }
 
 int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint32_t stack_size)
@@ -63,10 +83,10 @@ int32_t Task_Launch(uint16_t task_id)
         return -1;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
-    if (TASK_LAUNCH_STATE_SUSPENDED != task->launch_state)
+    if (Task_IsLaunched(task))
         return -2;
 
-    task->launch_state = TASK_LAUNCH_STATE_LAUNCHED;
+    Task_SetState(task, TASK_LAUNCH_STATE_LAUNCHED);
     return 0;
 }
 
@@ -76,7 +96,7 @@ int32_t Task_Kill(uint16_t task_id)
         return -1;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
-    task->launch_state = TASK_LAUNCH_STATE_SUSPENDED;
+    Task_SetState(task, TASK_LAUNCH_STATE_SUSPENDED);
 
     if (tasks_manager.curr_task->id == task->id)
         Platform_ScheduleTaskSwitch();
@@ -90,7 +110,7 @@ int32_t Task_Free(uint16_t task_id)
         return -1;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
-    if (TASK_LAUNCH_STATE_SUSPENDED != task->launch_state)
+    if (Task_IsLaunched(task))
         return -2;
 
     if (tasks_manager.curr_task->id == task->id)
@@ -102,6 +122,28 @@ int32_t Task_Free(uint16_t task_id)
     task->program_owner_id = PROGRAMS_ID_EMPTY;
 
     TasksManager_RemoveFromQueue(&tasks_manager, task);
+    task->prev_for_switcher = NULL;
+    task->next_for_switcher = NULL;
+    task->prev_for_program = NULL;
+    task->next_for_program = NULL;
+
+    return 0;
+}
+
+int32_t Task_KickIntoSleep(uint16_t task_id, uint32_t sleep_time)
+{
+    if (TASKS_MAX_COUNT <= task_id)
+        return -1;
+
+    Task_Item *task = Task_GetTaskAddress(task_id);
+    if (!Task_IsLaunched(task))
+        return -2;
+
+    task->remains_to_sleep = sleep_time;
+    Task_SetState(task, TASK_LAUNCH_STATE_BLOCKED);
+
+    if (tasks_manager.curr_task->id == task->id)
+        Platform_ScheduleTaskSwitch();
 
     return 0;
 }

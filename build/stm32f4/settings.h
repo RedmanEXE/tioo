@@ -19,10 +19,10 @@
 
 // Memory settings
 #define MEM_BASE_ADDRESS                        0x20000000
-#define MEM_STACK_TOP_ADDRESS                   0x20001000
+#define MEM_STACK_TOP_ADDRESS                   0x20000400
 
 // Internal defines for pages logic
-#define MEM_STACK_SIZE_IN_BYTES                 (4 * 1024)
+#define MEM_STACK_SIZE_IN_BYTES                 (1 * 1024)
 #define MEM_SIZE_IN_BYTES                       (128 * 1024 - MEM_STACK_SIZE_IN_BYTES)
 
 #define MEM_PAGE_SIZE_IN_BYTES                  1024

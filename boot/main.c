@@ -18,6 +18,7 @@ void *task1_routine(void *arg)
 {
     (void)arg;
 
+    SysTask_KickIntoSleep(1, 5000);
     while (1) {}
 
     return NULL;
@@ -51,6 +52,7 @@ int Kernel_EntryPoint(void)
 
     Memory_Initialize();
     TasksManager_Initialize();
+    Program_Initialize();
 
     // Test field
     void *point = SysMemory_Allocate(2, 1000);
@@ -58,10 +60,8 @@ int Kernel_EntryPoint(void)
     SysMemory_Free(2, point);
     (void)point2;
 
-    uint16_t task1_id = SysTask_Create(PROGRAMS_ID_KERNEL, task1_routine, (void *)1);
-    SysTask_Launch(task1_id);
-    uint16_t task2_id = SysTask_Create(PROGRAMS_ID_KERNEL, task2_routine, (void *)2);
-    SysTask_Launch(task2_id);
+    uint16_t program_id = SysProgram_Execute(task1_routine, (void *)1);
+    SysProgram_AddTask(program_id, task2_routine, (void *)2);
     // END: Test field
 
     SystemTimer_InitializeForTaskSwitching();
