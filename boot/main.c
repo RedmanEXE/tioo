@@ -3,8 +3,7 @@
 #include <peripherals/systimer/systimer.h>
 #include <syscalls/syscalls.h>
 #include <mem/mem.h>
-
-#include "programs/programs.h"
+#include <programs/programs.h>
 
 extern uint32_t _sidata;
 extern uint32_t _sdata;
