@@ -130,7 +130,7 @@ int32_t Task_Free(uint16_t task_id)
     return 0;
 }
 
-int32_t Task_KickIntoSleep(uint16_t task_id, uint32_t sleep_time)
+int32_t Task_KickIntoSleep(uint16_t task_id, int32_t sleep_time)
 {
     if (TASKS_MAX_COUNT <= task_id)
         return -1;

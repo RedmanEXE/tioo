@@ -6,10 +6,11 @@
 Platform_SCHandler:
     tst     lr, #4
     ite     eq
-        mrseq   r5, msp
-        mrsne   r5, psp
+        mrseq   r0, msp
+        mrsne   r0, psp
 
     push    {lr, r4, r5}
+    mov     r5, r0
 
     ldr     r0, [r5, #0]    // arg0
     ldr     r1, [r5, #4]    // arg1
@@ -22,5 +23,5 @@ Platform_SCHandler:
 
     str     r0, [r5, #0]
 
-    pop     {r5, r4, lr}
+    pop     {lr, r4, r5}
     bx      lr

@@ -75,7 +75,7 @@ inline int32_t SysTask_Launch(uint16_t task_id)
 }
 
 // later
-inline int32_t SysTask_KickIntoSleep(uint16_t task_id, uint32_t sleep_time)
+inline int32_t SysTask_KickIntoSleep(uint16_t task_id, int32_t sleep_time)
 {
     return (int32_t)Platform_SyscallInvoke(SCN_TASK_SLEEP, (uint32_t)task_id, (uint32_t)sleep_time, 0, 0);
 }
@@ -85,5 +85,3 @@ inline int32_t SysTask_Kill(uint16_t task_id)
 {
     return (int32_t)Platform_SyscallInvoke(SCN_TASK_KILL, (uint32_t)task_id, 0, 0, 0);
 }
-
-

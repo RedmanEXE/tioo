@@ -37,7 +37,7 @@ uint32_t Kernel_Syscalls(
         case SCN_TASK_LAUNCH:
             return (uint32_t)Task_Launch((uint16_t)arg0);
         case SCN_TASK_SLEEP:
-            return (uint32_t)Task_KickIntoSleep((uint16_t)arg0, (uint32_t)arg1);
+            return (uint32_t)Task_KickIntoSleep((uint16_t)arg0, (int32_t)arg1);
         case SCN_TASK_KILL:
             return (uint32_t)Task_Kill((uint16_t)arg0);
         default:

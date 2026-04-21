@@ -34,7 +34,7 @@ int32_t SysProgram_Terminate(uint16_t id);
 
 int32_t SysTask_Create(uint16_t program_id, void *(*func)(void *), void *arg);
 int32_t SysTask_Launch(uint16_t task_id);
-int32_t SysTask_KickIntoSleep(uint16_t task_id, uint32_t sleep_time);
+int32_t SysTask_KickIntoSleep(uint16_t task_id, int32_t sleep_time);
 
 uint32_t Service_Register();
 
