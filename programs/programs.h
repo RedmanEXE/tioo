@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+#include <ipc/ipc.h>
 #include <tasks/tasks.h>
 #include <settings.h>
 
@@ -16,6 +17,8 @@ typedef struct
     uint16_t id;
     // Platform_ProgramData platform_data;
     uint32_t tasks_count;
+
+    Cablegrams_Queue *cablegrams;
 
     Task_Item *first_task;
     Task_Item *last_task;

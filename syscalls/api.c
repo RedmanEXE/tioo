@@ -85,3 +85,18 @@ inline int32_t SysTask_Kill(uint16_t task_id)
 {
     return (int32_t)Platform_SyscallInvoke(SCN_TASK_KILL, (uint32_t)task_id, 0, 0, 0);
 }
+
+inline void SysGPIO_LEDXOR(void)
+{
+    Platform_SyscallInvoke(SCN_KERNEL_READ, 0, 0, 0, 0);
+}
+
+int32_t SysCablegram_Send(uint16_t program_id, Cablegram_Item *cablegram)
+{
+    return (int32_t)Platform_SyscallInvoke(SCN_IPC_CABLEGRAM_SEND, (uint32_t)program_id, (uint32_t)cablegram, 0, 0);
+}
+
+int32_t SysCablegram_Receive(uint16_t program_id, Cablegram_Item *out)
+{
+    return (int32_t)Platform_SyscallInvoke(SCN_IPC_CABLEGRAM_RECEIVE, (uint32_t)program_id, (uint32_t)out, 0, 0);
+}

@@ -16,9 +16,15 @@ extern void Platform_ScheduleTaskSwitch();
 void *task1_routine(void *arg)
 {
     (void)arg;
+    Cablegram_Item cablegram;
+    cablegram.type = 1;
+    cablegram.data = 1;
 
-    SysTask_KickIntoSleep(1, 5000);
-    while (1) {}
+    while (1)
+    {
+        SysCablegram_Send(2, &cablegram);
+        SysTask_KickIntoSleep(1, 1000);
+    }
 
     return NULL;
 }
@@ -26,8 +32,13 @@ void *task1_routine(void *arg)
 void *task2_routine(void *arg)
 {
     (void)arg;
+    Cablegram_Item cablegram;
 
-    while (1) {}
+    while (1)
+    {
+        if (SysCablegram_Receive(2, &cablegram))
+            SysGPIO_LEDXOR();
+    }
 
     return NULL;
 }
@@ -59,8 +70,14 @@ int Kernel_EntryPoint(void)
     SysMemory_Free(2, point);
     (void)point2;
 
-    uint16_t program_id = SysProgram_Execute(task1_routine, (void *)1);
-    SysProgram_AddTask(program_id, task2_routine, (void *)2);
+    uint32_t *ahb1 = (uint32_t *)0x40023830;
+    *ahb1 |= 4;
+    uint32_t *cmoder = (uint32_t *)0x40020800;
+    *cmoder &= ~(3U << (13 * 2));
+    *cmoder |= 1U << (13 * 2);
+
+    SysProgram_Execute(task1_routine, (void *)1);
+    SysProgram_Execute(task2_routine, (void *)2);
     // END: Test field
 
     SystemTimer_InitializeForTaskSwitching();

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include <ipc/ipc.h>
+
 typedef enum
 {
     SCN_KERNEL_READ             = 0,
@@ -19,11 +21,16 @@ typedef enum
     SCN_TASK_SLEEP              = 8,
     SCN_TASK_KILL               = 9,
 
+    SCN_IPC_CABLEGRAM_SEND      = 10,
+    SCN_IPC_CABLEGRAM_RECEIVE   = 11,
+
     SCN_CALLS_LENGTH,
 } Kernel_SyscallNumber;
 
 uint32_t Kernel_Read();
 uint32_t Kernel_Write();
+
+void SysGPIO_LEDXOR(void);
 
 void *SysMemory_Allocate(uint16_t owner_id, uint32_t size);
 void SysMemory_Free(uint16_t owner_id, void *ptr);
@@ -35,6 +42,9 @@ int32_t SysProgram_Terminate(uint16_t id);
 int32_t SysTask_Create(uint16_t program_id, void *(*func)(void *), void *arg);
 int32_t SysTask_Launch(uint16_t task_id);
 int32_t SysTask_KickIntoSleep(uint16_t task_id, int32_t sleep_time);
+
+int32_t SysCablegram_Send(uint16_t program_id, Cablegram_Item *cablegram);
+int32_t SysCablegram_Receive(uint16_t program_id, Cablegram_Item *out);
 
 uint32_t Service_Register();
 

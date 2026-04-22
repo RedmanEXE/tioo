@@ -147,3 +147,38 @@ int32_t Task_KickIntoSleep(uint16_t task_id, int32_t sleep_time)
 
     return 0;
 }
+
+int32_t Task_LockByObject(uint16_t task_id, void *object, int32_t timeout)
+{
+    if (TASKS_MAX_COUNT <= task_id)
+        return -1;
+
+    Task_Item *task = Task_GetTaskAddress(task_id);
+    if (NULL != task->lock_object)
+        return -2;
+
+    task->lock_object = object;
+    task->remains_to_sleep = timeout;
+    Task_SetState(task, TASK_LAUNCH_STATE_BLOCKED);
+
+    if (tasks_manager.curr_task->id == task->id)
+        Platform_ScheduleTaskSwitch();
+
+    return 0;
+}
+
+int32_t Task_UnlockByObject(uint16_t task_id, void *object)
+{
+    if (TASKS_MAX_COUNT <= task_id)
+        return -1;
+
+    Task_Item *task = Task_GetTaskAddress(task_id);
+    if (object != task->lock_object)
+        return -2;
+
+    task->lock_object = NULL;
+    task->remains_to_sleep = 0;
+    Task_SetState(task, TASK_LAUNCH_STATE_LAUNCHED);
+
+    return 0;
+}

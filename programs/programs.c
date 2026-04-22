@@ -2,6 +2,8 @@
 
 #include "programs.h"
 
+#include "mem/mem.h"
+
 __attribute__((section(".kernel_bss"))) Program_Item programs[PROGRAMS_MAX_COUNT];
 
 static Program_Item *Program_FindEmptySlot()
@@ -77,6 +79,9 @@ int32_t Program_Execute(void*(*func)(void*), void* arg)
     Program_Item *empty_slot = Program_FindEmptySlot();
     if (NULL == empty_slot)
         return -1;
+
+    empty_slot->cablegrams = Memory_Allocate(PROGRAMS_ID_KERNEL, IPC_CABLEGRAMS_QUEUE_MEMORY_SIZE);
+    CablegramsQueue_Initialize(empty_slot->cablegrams);
 
     int32_t task_id = Task_Create(empty_slot->id, func, arg, PROGRAM_DEFAULT_TASK_STACK_SIZE);
     Task_Item *task = Task_GetTaskAddress(task_id);

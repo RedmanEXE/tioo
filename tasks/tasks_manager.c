@@ -8,6 +8,9 @@ extern void Platform_ChangeCurrentContextPointer(void *new_ptr);
 
 __attribute__((section(".kernel_bss"))) TasksManager tasks_manager;
 
+// TODO: Rewrite scheduling: add WFI and improve selection
+// TODO: Add to followable objects field for fast unlocking, don't search locked tasks manually
+
 static Task_Item *TasksManager_FindNextTask(Task_Item *curr_task)
 {
     int32_t idx;
@@ -78,7 +81,10 @@ void TasksManager_UpdateSleepTimersForTasks()
         {
             item->remains_to_sleep--;
             if (0 == item->remains_to_sleep && TASK_LAUNCH_STATE_BLOCKED == item->launch_state)
+            {
                 item->launch_state = TASK_LAUNCH_STATE_LAUNCHED;
+                item->lock_object = NULL;
+            }
         }
 
         item = item->next_for_switcher;
@@ -103,4 +109,11 @@ void *TasksManager_Switch(void *sp_to_save)
     Task_SwapStates(task);
     task->launch_state = TASK_LAUNCH_STATE_RUNNING;
     return tasks_manager.curr_task->stack_ptr;
+}
+
+void TasksManager_UnlockTasksByObject(void *object)
+{
+    uint16_t idx;
+    for (idx = 0; idx < TASKS_MAX_COUNT; idx++)
+        Task_UnlockByObject(idx, object);
 }
