@@ -26,7 +26,7 @@ uint32_t Kernel_Syscalls(
 	switch (func_idx)
 	{
 		case SCN_KERNEL_READ:
-			*(uint32_t *)(0x40020814) ^= (1 << 13);
+			*(uint32_t *)(0x4001080C) ^= (1 << 5);
 			break;
 
 		case SCN_MEMORY_ALLOCATE:

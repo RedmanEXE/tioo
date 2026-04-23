@@ -70,11 +70,11 @@ int Kernel_EntryPoint(void)
     SysMemory_Free(2, point);
     (void)point2;
 
-    uint32_t *ahb1 = (uint32_t *)0x40023830;
+    uint32_t *ahb1 = (uint32_t *)0x40021018;
     *ahb1 |= 4;
-    uint32_t *cmoder = (uint32_t *)0x40020800;
-    *cmoder &= ~(3U << (13 * 2));
-    *cmoder |= 1U << (13 * 2);
+    uint32_t *cmoder = (uint32_t *)0x40010800;
+    *cmoder &= ~(0xFU << 20);
+    *cmoder |= 0x3U << 20;
 
     SysProgram_Execute(task1_routine, (void *)1);
     SysProgram_Execute(task2_routine, (void *)2);
