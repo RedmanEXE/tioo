@@ -5,6 +5,10 @@
 #ifndef TIOO_SETTINGS_H_
 #define TIOO_SETTINGS_H_
 
+// IPC settings
+#define IPC_KEYS_MAX_COUNT                      TASKS_MAX_COUNT
+// END: IPC settings
+
 // Programs settings
 #define PROGRAMS_MAX_COUNT                      16
 // END: Programs settings

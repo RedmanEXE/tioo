@@ -36,11 +36,19 @@ void *task2_routine(void *arg)
 
     while (1)
     {
-        if (SysCablegram_Receive(2, &cablegram))
-            SysGPIO_LEDXOR();
+        int32_t answer = SysCablegram_WaitAndReceive(2, 3, &cablegram, 3000);
+        if (answer == 1)
+            SysTask_KickIntoSleep(2, 500);
+            // SysGPIO_LEDXOR();
     }
 
     return NULL;
+}
+
+void *task3_routine(void *arg)
+{
+    (void)arg;
+    while (1) {}
 }
 
 // Thorfinn says:
@@ -70,14 +78,16 @@ int Kernel_EntryPoint(void)
     SysMemory_Free(2, point);
     (void)point2;
 
-    uint32_t *ahb1 = (uint32_t *)0x40021018;
-    *ahb1 |= 4;
-    uint32_t *cmoder = (uint32_t *)0x40010800;
-    *cmoder &= ~(0xFU << 20);
-    *cmoder |= 0x3U << 20;
+    // uint32_t *ahb1 = (uint32_t *)0x40021018;
+    // *ahb1 |= 4;
+    // uint32_t *cmoder = (uint32_t *)0x40010800;
+    // *cmoder &= ~(0xFU << 20);
+    // *cmoder |= 0x3U << 20;
 
     SysProgram_Execute(task1_routine, (void *)1);
-    SysProgram_Execute(task2_routine, (void *)2);
+    uint16_t program_id = SysProgram_Execute(task3_routine, (void *)2);
+    SysProgram_AddTask(program_id, task2_routine, (void *)3);
+    SysProgram_Execute(task3_routine, (void *)4);
     // END: Test field
 
     SystemTimer_InitializeForTaskSwitching();

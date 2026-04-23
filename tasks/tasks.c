@@ -148,16 +148,16 @@ int32_t Task_KickIntoSleep(uint16_t task_id, int32_t sleep_time)
     return 0;
 }
 
-int32_t Task_LockByObject(uint16_t task_id, void *object, int32_t timeout)
+int32_t Task_LockByKey(uint16_t task_id, void *key, int32_t timeout)
 {
     if (TASKS_MAX_COUNT <= task_id)
         return -1;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
-    if (NULL != task->lock_object)
+    if (NULL != task->lock_key)
         return -2;
 
-    task->lock_object = object;
+    task->lock_key = key;
     task->remains_to_sleep = timeout;
     Task_SetState(task, TASK_LAUNCH_STATE_BLOCKED);
 
@@ -167,16 +167,16 @@ int32_t Task_LockByObject(uint16_t task_id, void *object, int32_t timeout)
     return 0;
 }
 
-int32_t Task_UnlockByObject(uint16_t task_id, void *object)
+int32_t Task_UnlockByKey(uint16_t task_id, void *key)
 {
     if (TASKS_MAX_COUNT <= task_id)
         return -1;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
-    if (object != task->lock_object)
+    if (key != task->lock_key)
         return -2;
 
-    task->lock_object = NULL;
+    task->lock_key = NULL;
     task->remains_to_sleep = 0;
     Task_SetState(task, TASK_LAUNCH_STATE_LAUNCHED);
 

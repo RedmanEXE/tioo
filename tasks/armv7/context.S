@@ -43,3 +43,18 @@ Platform_ChangeCurrentContextPointer: // (void *new_ptr)
     msr     psp, r0
 
     bx      lr
+
+.type       Platform_GetArgumentValueFromContext, %function
+.global     Platform_GetArgumentValueFromContext
+Platform_GetArgumentValueFromContext: // (void *stack_ptr, uint32_t index)
+    lsl     r1, 2
+    ldr     r0, [r0, r1]
+
+    bx      lr
+
+.type       Platform_PutReturnValueIntoContext, %function
+.global     Platform_PutReturnValueIntoContext
+Platform_PutReturnValueIntoContext: // (void *stack_ptr, uint32_t result)
+    str     r1, [r0, #32]
+
+    bx      lr

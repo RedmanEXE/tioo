@@ -100,3 +100,9 @@ int32_t SysCablegram_Receive(uint16_t program_id, Cablegram_Item *out)
 {
     return (int32_t)Platform_SyscallInvoke(SCN_IPC_CABLEGRAM_RECEIVE, (uint32_t)program_id, (uint32_t)out, 0, 0);
 }
+
+int32_t SysCablegram_WaitAndReceive(uint16_t program_id, uint16_t task_id, Cablegram_Item *out, int32_t timeout)
+{
+    return (int32_t) Platform_SyscallInvoke(SCN_IPC_CABLEGRAM_WAIT_AND_RECEIVE, (uint32_t)program_id, (uint32_t)task_id,
+                                            (uint32_t)out, (uint32_t)timeout);
+}

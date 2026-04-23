@@ -60,6 +60,9 @@ uint32_t Kernel_Syscalls(
 		case SCN_IPC_CABLEGRAM_RECEIVE:
 			return (uint32_t)Cablegram_Receive((uint16_t)arg0, (Cablegram_Item *)arg1);
 
+		case SCN_IPC_CABLEGRAM_WAIT_AND_RECEIVE:
+			return (uint32_t)Cablegram_WaitAndReceive((uint16_t)arg0, (uint16_t)arg1, (Cablegram_Item *)arg2, (int32_t)arg3);
+
 		default:
 			break;
 	}

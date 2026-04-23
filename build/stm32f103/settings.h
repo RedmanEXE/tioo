@@ -9,6 +9,10 @@
 
 // END: Interruptions settings
 
+// IPC settings
+#define IPC_KEYS_MAX_COUNT                      TASKS_MAX_COUNT
+// END: IPC settings
+
 // Programs settings
 #define PROGRAMS_MAX_COUNT                      32
 // END: Programs settings

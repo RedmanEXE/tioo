@@ -32,6 +32,7 @@ set(SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/tasks/tasks_manager.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/peripherals/systimer/systimer.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/ipc/cablegrams.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ipc/locks.c"
 )
 add_executable(Kernel ${SOURCES})
 
