@@ -38,8 +38,7 @@ void *task2_routine(void *arg)
     {
         int32_t answer = SysCablegram_WaitAndReceive(2, 3, &cablegram, 3000);
         if (answer == 1)
-            SysTask_KickIntoSleep(2, 500);
-            // SysGPIO_LEDXOR();
+            SysTask_KickIntoSleep(3, 500);
     }
 
     return NULL;
@@ -71,6 +70,7 @@ int Kernel_EntryPoint(void)
     Memory_Initialize();
     TasksManager_Initialize();
     Program_Initialize();
+    Synchronizers_Initialize();
 
     // Test field
     void *point = SysMemory_Allocate(2, 1000);

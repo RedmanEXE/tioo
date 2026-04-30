@@ -33,6 +33,9 @@ set(SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/peripherals/systimer/systimer.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/ipc/cablegrams.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/ipc/locks.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ipc/mutexes.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ipc/semaphores.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ipc/synchronizers.c"
 )
 add_executable(Kernel ${SOURCES})
 

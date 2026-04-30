@@ -15,7 +15,7 @@ static Task_Item *Task_FindFirstFreeStruct()
 {
     uint32_t idx;
     Task_Item *item = NULL;
-    for (idx = 1; idx <= TASKS_MAX_COUNT; idx++)
+    for (idx = 1; TASKS_MAX_COUNT >= idx; idx++)
     {
         Task_Item *task = Task_GetTaskAddress(idx);
         if (NULL == task->stack_ptr)

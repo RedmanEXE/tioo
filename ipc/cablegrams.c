@@ -1,7 +1,6 @@
 #include "ipc.h"
 
 #include <stddef.h>
-#include <settings.h>
 #include <programs/programs.h>
 
 extern uint32_t Platform_GetArgumentValueFromContext(void *stack_ptr, uint32_t index);
