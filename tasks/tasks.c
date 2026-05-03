@@ -5,6 +5,8 @@
 #include <mem/mem.h>
 #include <programs/programs.h>
 
+#include "owners/owners.h"
+
 extern void *Platform_CreateTaskContext(void *stack_ptr, void *(*func)(void *), void *arg, uint32_t create_with_extras);
 extern void Platform_CreateMemoryProtectionContext(Platform_TaskData *zone);
 extern void Platform_ScheduleTaskSwitch();
@@ -114,7 +116,7 @@ int32_t Task_Free(uint16_t task_id)
         return -2;
 
     if (tasks_manager.curr_task->id == task->id)
-        return -3;
+        Platform_ScheduleTaskSwitch();
 
     // FIXME: Check Memory_Free in mem/mem.c
     Memory_Free(task_id, task->stack_ptr);
@@ -122,12 +124,13 @@ int32_t Task_Free(uint16_t task_id)
     task->program_owner_id = PROGRAMS_ID_EMPTY;
 
     TasksManager_RemoveFromQueue(&tasks_manager, task);
-    task->prev_for_switcher = NULL;
-    task->next_for_switcher = NULL;
-    task->prev_for_program = NULL;
-    task->next_for_program = NULL;
 
     return 0;
+}
+
+int32_t Task_GetID()
+{
+    return Owner_GetActiveTaskID();
 }
 
 int32_t Task_KickIntoSleep(uint16_t task_id, int32_t sleep_time)
@@ -138,6 +141,9 @@ int32_t Task_KickIntoSleep(uint16_t task_id, int32_t sleep_time)
     Task_Item *task = Task_GetTaskAddress(task_id);
     if (!Task_IsLaunched(task))
         return -2;
+
+    if (0 >= sleep_time)
+        return 0;
 
     task->remains_to_sleep = sleep_time;
     Task_SetState(task, TASK_LAUNCH_STATE_BLOCKED);

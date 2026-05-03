@@ -30,6 +30,7 @@ Program_Item *Program_GetProgramAddress(uint16_t program_id);
 int32_t Program_AddTask(uint16_t program_id, void*(*func)(void*), void* arg);
 int32_t Program_Execute(void*(*func)(void*), void* arg);
 void Program_Initialize(void);
+int32_t Program_GetID();
 int32_t Program_Terminate(uint16_t id);
 
 #endif //TIOO_PROGRAMS_H_

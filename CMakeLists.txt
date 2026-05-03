@@ -36,6 +36,7 @@ set(SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/ipc/mutexes.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/ipc/semaphores.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/ipc/synchronizers.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/owners/owners.c"
 )
 add_executable(Kernel ${SOURCES})
 

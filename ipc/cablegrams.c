@@ -88,6 +88,9 @@ int32_t Cablegram_WaitAndReceive(uint16_t program_id, uint16_t task_id, Cablegra
     if (PROGRAMS_MAX_COUNT <= program_id)
         return -1;
 
+    if (0 > timeout)
+        timeout = 0;
+
     Program_Item *program = Program_GetProgramAddress(program_id);
     Cablegram_Item *cablegram = CablegramsQueue_ReadMessage(program->cablegrams);
     if (NULL == cablegram)

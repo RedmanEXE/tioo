@@ -1,5 +1,4 @@
 #include <stddef.h>
-
 #include <peripherals/systimer/systimer.h>
 #include <syscalls/syscalls.h>
 #include <mem/mem.h>
@@ -23,10 +22,10 @@ void *task1_routine(void *arg)
     while (1)
     {
         SysCablegram_Send(2, &cablegram);
-        SysTask_KickIntoSleep(1, 1000);
+        SysTask_KickIntoSleep(1000);
     }
 
-    return NULL;
+    SysProgram_Terminate(SysProgram_GetID());
 }
 
 void *task2_routine(void *arg)
@@ -36,12 +35,12 @@ void *task2_routine(void *arg)
 
     while (1)
     {
-        int32_t answer = SysCablegram_WaitAndReceive(2, 3, &cablegram, 3000);
+        int32_t answer = SysCablegram_WaitAndReceive(&cablegram, 3000);
         if (answer == 1)
-            SysTask_KickIntoSleep(3, 500);
+            SysTask_KickIntoSleep(5000);
     }
 
-    return NULL;
+    SysProgram_Terminate(SysProgram_GetID());
 }
 
 void *task3_routine(void *arg)
@@ -51,7 +50,7 @@ void *task3_routine(void *arg)
 }
 
 // Thorfinn says:
-// main file huli tut pisat'
+// main file cho tut pisat'
 int Kernel_EntryPoint(void)
 {
     uint32_t *src, *dest;
@@ -73,10 +72,10 @@ int Kernel_EntryPoint(void)
     Synchronizers_Initialize();
 
     // Test field
-    void *point = SysMemory_Allocate(2, 1000);
-    void *point2 = SysMemory_Allocate(2, 1000);
-    SysMemory_Free(2, point);
-    (void)point2;
+    // void *point = SysMemory_Allocate(2, 1000);
+    // void *point2 = SysMemory_Allocate(2, 1000);
+    // SysMemory_Free(2, point);
+    // (void)point2;
 
     // uint32_t *ahb1 = (uint32_t *)0x40021018;
     // *ahb1 |= 4;
@@ -84,10 +83,10 @@ int Kernel_EntryPoint(void)
     // *cmoder &= ~(0xFU << 20);
     // *cmoder |= 0x3U << 20;
 
-    SysProgram_Execute(task1_routine, (void *)1);
-    uint16_t program_id = SysProgram_Execute(task3_routine, (void *)2);
-    SysProgram_AddTask(program_id, task2_routine, (void *)3);
-    SysProgram_Execute(task3_routine, (void *)4);
+    Program_Execute(task1_routine, (void *)1);
+    uint16_t program_id = Program_Execute(task3_routine, (void *)2);
+    Program_AddTask(program_id, task2_routine, (void *)3);
+    Program_Execute(task3_routine, (void *)4);
     // END: Test field
 
     SystemTimer_InitializeForTaskSwitching();

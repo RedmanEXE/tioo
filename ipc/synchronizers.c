@@ -9,7 +9,7 @@ Synchronizer_Object *Synchronizer_GetSynchronizerAddress(uint16_t sync_id)
     return &synchronizers[sync_id - 1];
 }
 
-Synchronizer_Object *Synchronizer_FindFreeObject()
+Synchronizer_Object *Synchronizers_FindFreeObject()
 {
     uint16_t idx;
     Synchronizer_Object *free_item = NULL;
@@ -51,6 +51,9 @@ int32_t Synchronizer_GetResource(uint16_t syncer_id, uint16_t task_id, int32_t t
         default:
             result = -3;
     }
+
+    if (0 > timeout)
+        timeout = 0;
 
     if (0 == result)
         Lock_CloseByKey(&synchronizer->key, task_id, timeout);

@@ -57,7 +57,7 @@ void TasksManager_RemoveFromQueue(TasksManager *manager, Task_Item *task_to_remo
         manager->last_task = task_to_remove->prev_for_switcher;
 
     task_to_remove->next_for_switcher->prev_for_switcher = task_to_remove->prev_for_switcher;
-    task_to_remove->prev_for_switcher->next_for_program = task_to_remove->next_for_switcher;
+    task_to_remove->prev_for_switcher->next_for_switcher = task_to_remove->next_for_switcher;
 
     manager->tasks_count--;
 

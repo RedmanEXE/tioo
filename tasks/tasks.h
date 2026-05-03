@@ -54,6 +54,7 @@ int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint3
 int32_t Task_Launch(uint16_t task_id);
 int32_t Task_Kill(uint16_t id);
 int32_t Task_Free(uint16_t task_id);
+int32_t Task_GetID();
 int32_t Task_KickIntoSleep(uint16_t task_id, int32_t sleep_time);
 Task_Item *Task_GetTaskAddress(uint16_t task_id);
 void Task_SetState(Task_Item *task, Task_LaunchState new_state);

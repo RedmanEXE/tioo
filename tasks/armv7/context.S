@@ -3,7 +3,7 @@
 
 .type       Platform_CreateTaskContext, %function
 .global     Platform_CreateTaskContext
-Platform_CreateTaskContext: // (void *stack_ptr, void *(*func)(void *), void *arg, uint32_t create_with_extras);
+Platform_CreateTaskContext: // (void *stack_ptr, void *(* func)(void *), void *arg, uint32_t create_with_extras);
     push    {r4}
     // Align stack by 8
     bic     r0, r0, #7

@@ -83,7 +83,7 @@ int32_t Semaphore_GetResource(Synchronizer_Object *synchronizer);
 int32_t Semaphore_ReturnResource(Synchronizer_Object *synchronizer);
 
 void Synchronizers_Initialize(void);
-Synchronizer_Object *Synchronizer_FindFreeObject();
+Synchronizer_Object *Synchronizers_FindFreeObject();
 
 int32_t Synchronizer_GetResource(uint16_t syncer_id, uint16_t task_id, int32_t timeout);
 int32_t Synchronizer_ReturnResource(uint16_t syncer_id, uint16_t task_id);

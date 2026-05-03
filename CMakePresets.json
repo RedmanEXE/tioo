@@ -13,23 +13,23 @@
             }
         },
         {
-            "name": "stm32f411-armv7",
-            "displayName": "STM32F411 (ARMv7)",
+            "name": "stm32f411xe-armv7",
+            "displayName": "STM32F411xE (ARMv7)",
             "toolchainFile": "cmake/armv7/toolchain.cmake",
-            "binaryDir": "cache/stm32f411",
+            "binaryDir": "cache/stm32f411xe",
             "cacheVariables": {
-                "MCU_DIR": "stm32f411",
+                "MCU_DIR": "stm32f411xe",
                 "ARCH_DIR": "armv7",
                 "PLATFORM_FLAGS": "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16"
             }
         },
         {
-            "name": "stm32f103-armv7",
-            "displayName": "STM32F103 (ARMv7)",
+            "name": "stm32f103xb-armv7",
+            "displayName": "STM32F103xB (ARMv7)",
             "toolchainFile": "cmake/armv7/toolchain.cmake",
-            "binaryDir": "cache/stm32f103",
+            "binaryDir": "cache/stm32f103xb",
             "cacheVariables": {
-                "MCU_DIR": "stm32f103",
+                "MCU_DIR": "stm32f103xb",
                 "ARCH_DIR": "armv7",
                 "PLATFORM_FLAGS": "-mcpu=cortex-m3 -mthumb"
             }

@@ -18,7 +18,7 @@ static void Semaphores_UnlockCallback(Lock_KeyObject *key, Task_Item *task)
 
 int32_t Semaphore_CreateObject(uint8_t max_count)
 {
-    Synchronizer_Object *synchronizer = Synchronizer_FindFreeObject();
+    Synchronizer_Object *synchronizer = Synchronizers_FindFreeObject();
     if (NULL == synchronizer)
         return -1;
 
@@ -60,5 +60,5 @@ int32_t Semaphore_ReturnResource(Synchronizer_Object *synchronizer)
         return -2;
 
     synchronizer->data.semaphore.current_count--;
-    return 1;
+    return 0;
 }

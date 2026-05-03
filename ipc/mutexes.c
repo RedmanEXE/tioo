@@ -18,7 +18,7 @@ static void Mutexes_UnlockCallback(Lock_KeyObject *key, Task_Item *task)
 
 int32_t Mutex_CreateObject(void)
 {
-    Synchronizer_Object *synchronizer = Synchronizer_FindFreeObject();
+    Synchronizer_Object *synchronizer = Synchronizers_FindFreeObject();
     if (NULL == synchronizer)
         return -1;
 
@@ -59,5 +59,5 @@ int32_t Mutex_ReturnResource(Synchronizer_Object *synchronizer, uint16_t task_id
         return -2;
 
     synchronizer->data.mutex.owner_task_id = 0;
-    return 1;
+    return 0;
 }
