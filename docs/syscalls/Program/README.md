@@ -12,6 +12,11 @@ and **MUST** be used in task management, because all tasks want to be bonded wit
 | [Program_GetID](#Program_GetID)         | Returns ID of the program, that called this function.                  |
 | [Program_Terminate](#Program_Terminate) | Terminates a program and frees all resources, that this program holds. |
 
+| Returnable errors                                                               | Short description            |
+|---------------------------------------------------------------------------------|------------------------------|
+| [PROGRAM_ERROR_ID_OUT_OF_BOUNDS](#PROGRAM_ERROR_ID_OUT_OF_BOUNDS)               | ID of the unknown program.   |
+| [PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS](#PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS) | All program slots were used. |
+
 ## Public functions
 
 ### Program_AddTask
@@ -19,7 +24,7 @@ and **MUST** be used in task management, because all tasks want to be bonded wit
 uint16_t Program_AddTask(void*(* func)(void*), void *arg);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Adds a task for program, where this function called.
 
 | Parameters | Description                                                                                                                                                                           |
@@ -37,7 +42,7 @@ uint16_t Program_AddTask(void*(* func)(void*), void *arg);
 uint16_t Program_Execute(void*(* func)(void*), void *arg);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Creates a program, and a task for it, which will be in the `LAUNCHED` state.
 
 | Parameters | Description                                                                                                                                                        |
@@ -55,7 +60,7 @@ uint16_t Program_Execute(void*(* func)(void*), void *arg);
 uint16_t Program_GetID();
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Returns ID of the program, that called this function.
 
 | Returns             | Description                                                                                      |
@@ -68,10 +73,30 @@ uint16_t Program_GetID();
 void Program_Terminate();
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Terminates a program and frees all resources, that this program holds. It includes all memory blocks, synchronizers and tasks.
 
 | Returns             | Description                                                                                      |
 |---------------------|--------------------------------------------------------------------------------------------------|
 | `0`                 |                                                                                                  |
 | If fails: `int32_t` | If function fails, returnable contains negative value and will depend on the cause of the error. |
+
+## Returnable errors
+
+### PROGRAM_ERROR_ID_OUT_OF_BOUNDS
+```c++
+#define PROGRAM_ERROR_ID_OUT_OF_BOUNDS              (-1)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-1`
+- Argument of the function contains ID of the unknown program.
+
+### PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS
+```c++
+#define PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS       (-2)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-2`
+- There's no free program slots in the poll. Try to terminate a few programs before another call.

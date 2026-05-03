@@ -12,6 +12,13 @@
 | [Task_Kill](#Task_Kill)                   | Kills task (aka sets task state to `SUSPENDED` value).           |
 | [Task_Launch](#Task_Launch)               | Sets task state to `LAUNCHED` value.                             |
 
+| Returnable errors                                                         | Short description                                         |
+|---------------------------------------------------------------------------|-----------------------------------------------------------|
+| [TASK_ERROR_ID_OUT_OF_BOUNDS](#TASK_ERROR_ID_OUT_OF_BOUNDS)               | ID of the unknown task.                                   |
+| [TASK_ERROR_THERE_IS_NO_EMPTY_SLOTS](#TASK_ERROR_THERE_IS_NO_EMPTY_SLOTS) | All tasks slots were used.                                |
+| [TASK_ERROR_TASK_IS_LAUNCHED](#TASK_ERROR_TASK_IS_LAUNCHED)               | Task is launched, but function requires another state.    |
+| [TASK_ERROR_TASK_IS_NOT_LAUNCHED](#TASK_ERROR_TASK_IS_NOT_LAUNCHED)       | Task isn't launched, but function requires another state. |
+
 ## Public functions
 
 ### Task_Free
@@ -19,7 +26,7 @@
 void Task_Free(uint16_t task_id);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Frees task and its stack.
 - **Task must not be in `LAUNCHED` or `RUNNING` launch states!**
 
@@ -37,7 +44,7 @@ void Task_Free(uint16_t task_id);
 uint16_t Task_GetID();
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Returns ID of the task, that called this function.
 
 | Returns             | Description                                                                                      |
@@ -50,7 +57,7 @@ uint16_t Task_GetID();
 void Task_KickIntoSleep(int32_t sleep_time);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Puts task into "sleep" for the specified number of milliseconds. The task's launch state will be changed to `BLOCKED` value for some time,\
   and will be restored to the previous value automatically, when the "sleep alarm" countdown ends.
 - **Task must be in `LAUNCHED` or `RUNNING` launch states!**
@@ -69,7 +76,7 @@ void Task_KickIntoSleep(int32_t sleep_time);
 void Task_Kill(uint16_t task_id);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Kills task (aka sets task state to `SUSPENDED` value). To launch it again, use [`Task_Launch`](#Task_Launch) function.\
   When killed, task saves their state: if task will be launched again, it continues runtime from previous place in the code.
 - **Task must be in `LAUNCHED` or `RUNNING` launch states!**
@@ -88,7 +95,7 @@ void Task_Kill(uint16_t task_id);
 void Task_Launch(uint16_t task_id);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Sets task state to `LAUNCHED` value. After call, task can be called by the scheduler.\
   If task is "sleeping", this function **will not "wake up" it**.
 - **Task must not be in `LAUNCHED` or `RUNNING` launch states!**
@@ -101,3 +108,41 @@ void Task_Launch(uint16_t task_id);
 |---------------------|--------------------------------------------------------------------------------------------------|
 | `0`                 |                                                                                                  |
 | If fails: `int32_t` | If function fails, returnable contains negative value and will depend on the cause of the error. |
+
+## Returnable errors
+
+### TASK_ERROR_ID_OUT_OF_BOUNDS
+```c++
+#define TASK_ERROR_ID_OUT_OF_BOUNDS                 (-1)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-1`
+- Argument of the function contains ID of the unknown task object.
+
+### TASK_ERROR_THERE_IS_NO_EMPTY_SLOTS
+```c++
+#define TASK_ERROR_THERE_IS_NO_EMPTY_SLOTS          (-2)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-2`
+- There's no free tasks slots in the poll. Try to free a few tasks before another call.
+
+### TASK_ERROR_TASK_IS_LAUNCHED
+```c++
+#define TASK_ERROR_TASK_IS_LAUNCHED                 (-3)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-3`
+- Task is launched, but function requires another state.
+
+### TASK_ERROR_TASK_IS_NOT_LAUNCHED
+```c++
+#define TASK_ERROR_TASK_IS_NOT_LAUNCHED             (-4)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-4`
+- Task isn't launched, but function requires another state.

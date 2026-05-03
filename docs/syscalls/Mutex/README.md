@@ -21,7 +21,7 @@
 uint16_t Mutex_CreateObject();
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Creates a new mutex object.
 
 | Returns             | Description                                                                                      |
@@ -36,7 +36,7 @@ uint16_t Mutex_CreateObject();
 int32_t Mutex_GetResource(uint16_t syncer_id, int32_t timeout);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Tries to get resource from the mutex. If mutex is used by another task, task, that called function, will be kicked to sleep.
 
 | Parameters | Description                                                                                                                              |
@@ -54,7 +54,7 @@ int32_t Mutex_GetResource(uint16_t syncer_id, int32_t timeout);
 void Mutex_ReturnResource(uint16_t syncer_id);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Returns the resource back to the mutex. If a mutex is used, the resource can only be returned by the task currently using the resource.
 
 | Returns             | Description                                                                                      |

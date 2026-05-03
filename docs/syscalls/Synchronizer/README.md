@@ -10,6 +10,15 @@
 | [Synchronizer_GetResource](#Synchronizer_GetResource)       | Tries to get resource from the synchronizer.      |
 | [Synchronizer_ReturnResource](#Synchronizer_ReturnResource) | Returns the resource back to the synchronizer.    |
 
+| Returnable errors                                                                               | Short description                           |
+|-------------------------------------------------------------------------------------------------|---------------------------------------------|
+| [SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS](#SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS)                     | ID of the unknown synchronizer.             |
+| [SYNCHRONIZER_ERROR_THERE_IS_NO_FREE_SLOTS](#SYNCHRONIZER_ERROR_THERE_IS_NO_FREE_SLOTS)         | All synchronizers slots were used.          |
+| [SYNCHRONIZER_ERROR_WRONG_TYPE](#SYNCHRONIZER_ERROR_WRONG_TYPE)                                 | Type of the object is incorrect or unknown. |
+| [SYNCHRONIZER_ERROR_OBJECT_IS_ALREADY_FREE](#SYNCHRONIZER_ERROR_OBJECT_IS_ALREADY_FREE)         | Synchronizer is already free.               |
+| [SYNCHRONIZER_ERROR_RESOURCE_NOT_USED](#SYNCHRONIZER_ERROR_RESOURCE_NOT_USED)                   | Resource is already unused.                 |
+| [SYNCHRONIZER_ERROR_RESOURCE_YOU_ARE_NOT_OWNER](#SYNCHRONIZER_ERROR_RESOURCE_YOU_ARE_NOT_OWNER) | Resource cannot be returned by this task.   |
+
 ## Public functions
 
 ### Synchronizer_FreeObject
@@ -17,7 +26,7 @@
 void Synchronizer_FreeObject(uint16_t syncer_id);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Frees a previously allocated synchronizer object.
 
 | Parameters | Description                                                         |
@@ -34,7 +43,7 @@ void Synchronizer_FreeObject(uint16_t syncer_id);
 int32_t Synchronizer_GetResource(uint16_t syncer_id, int32_t timeout);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Tries to get resource from the synchronizer. Every type of the synchronization object implements this function differently.
 
 | Parameters | Description                                                                                                                              |
@@ -52,10 +61,66 @@ int32_t Synchronizer_GetResource(uint16_t syncer_id, int32_t timeout);
 void Synchronizer_ReturnResource(uint16_t syncer_id);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Returns the resource back to the synchronizer. If any other task waits this resource, it will be "awakened".
 
 | Returns             | Description                                                                                      |
 |---------------------|--------------------------------------------------------------------------------------------------|
 | `0`                 |                                                                                                  |
 | If fails: `int32_t` | If function fails, returnable contains negative value and will depend on the cause of the error. |
+
+## Returnable errors
+
+### SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS
+```c++
+#define SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS             (-1)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-1`
+- Argument of the function contains ID of the unknown synchronizer object.
+
+### PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS
+```c++
+#define SYNCHRONIZER_ERROR_THERE_IS_NO_FREE_SLOTS       (-2)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-2`
+- There's no free synchronizers slots in the poll. Try to free a few synchronizers before another call.
+
+### SYNCHRONIZER_ERROR_WRONG_TYPE
+```c++
+#define SYNCHRONIZER_ERROR_WRONG_TYPE                   (-3)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-3`
+- Type of the object is incorrect or unknown. Check, that correct ID of the object is used.
+
+### SYNCHRONIZER_ERROR_OBJECT_IS_ALREADY_FREE
+```c++
+#define SYNCHRONIZER_ERROR_OBJECT_IS_ALREADY_FREE       (-4)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-4`
+- Synchronizer is already free.
+
+### SYNCHRONIZER_ERROR_RESOURCE_NOT_USED
+```c++
+#define SYNCHRONIZER_ERROR_RESOURCE_NOT_USED            (-5)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-5`
+- Resource is already unused: semaphore counter equals 0, mutex is unlocked, etc.
+
+### SYNCHRONIZER_ERROR_RESOURCE_YOU_ARE_NOT_OWNER
+```c++
+#define SYNCHRONIZER_ERROR_RESOURCE_YOU_ARE_NOT_OWNER   (-6)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-6`
+- Resource cannot be returned by this task. It occurs only when synchronization object locks on specified task and cannot be unlocked by another task.

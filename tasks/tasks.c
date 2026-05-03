@@ -1,11 +1,10 @@
 #include "tasks.h"
 
 #include <stddef.h>
-
 #include <mem/mem.h>
 #include <programs/programs.h>
-
-#include "owners/owners.h"
+#include <owners/owners.h>
+#include <errors/tasks.h>
 
 extern void *Platform_CreateTaskContext(void *stack_ptr, void *(*func)(void *), void *arg, uint32_t create_with_extras);
 extern void Platform_CreateMemoryProtectionContext(Platform_TaskData *zone);
@@ -59,7 +58,7 @@ int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint3
 {
     Task_Item *task = Task_FindFirstFreeStruct();
     if (NULL == task)
-        return -1;
+        return TASK_ERROR_THERE_IS_NO_EMPTY_SLOTS;
 
     task->program_owner_id = program_id;
 
@@ -82,11 +81,11 @@ int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint3
 int32_t Task_Launch(uint16_t task_id)
 {
     if (TASKS_MAX_COUNT <= task_id)
-        return -1;
+        return TASK_ERROR_ID_OUT_OF_BOUNDS;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
     if (Task_IsLaunched(task))
-        return -2;
+        return TASK_ERROR_TASK_IS_LAUNCHED;
 
     Task_SetState(task, TASK_LAUNCH_STATE_LAUNCHED);
     return 0;
@@ -95,7 +94,7 @@ int32_t Task_Launch(uint16_t task_id)
 int32_t Task_Kill(uint16_t task_id)
 {
     if (TASKS_MAX_COUNT <= task_id)
-        return -1;
+        return TASK_ERROR_ID_OUT_OF_BOUNDS;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
     Task_SetState(task, TASK_LAUNCH_STATE_SUSPENDED);
@@ -109,11 +108,11 @@ int32_t Task_Kill(uint16_t task_id)
 int32_t Task_Free(uint16_t task_id)
 {
     if (TASKS_MAX_COUNT <= task_id)
-        return -1;
+        return TASK_ERROR_ID_OUT_OF_BOUNDS;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
     if (Task_IsLaunched(task))
-        return -2;
+        return TASK_ERROR_TASK_IS_LAUNCHED;
 
     if (tasks_manager.curr_task->id == task->id)
         Platform_ScheduleTaskSwitch();
@@ -136,11 +135,11 @@ int32_t Task_GetID()
 int32_t Task_KickIntoSleep(uint16_t task_id, int32_t sleep_time)
 {
     if (TASKS_MAX_COUNT <= task_id)
-        return -1;
+        return TASK_ERROR_ID_OUT_OF_BOUNDS;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
     if (!Task_IsLaunched(task))
-        return -2;
+        return TASK_ERROR_TASK_IS_NOT_LAUNCHED;
 
     if (0 >= sleep_time)
         return 0;
@@ -157,7 +156,7 @@ int32_t Task_KickIntoSleep(uint16_t task_id, int32_t sleep_time)
 int32_t Task_LockByKey(uint16_t task_id, void *key, int32_t timeout)
 {
     if (TASKS_MAX_COUNT <= task_id)
-        return -1;
+        return TASK_ERROR_ID_OUT_OF_BOUNDS;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
     if (NULL != task->lock_key)
@@ -176,7 +175,7 @@ int32_t Task_LockByKey(uint16_t task_id, void *key, int32_t timeout)
 int32_t Task_UnlockByKey(uint16_t task_id, void *key)
 {
     if (TASKS_MAX_COUNT <= task_id)
-        return -1;
+        return TASK_ERROR_ID_OUT_OF_BOUNDS;
 
     Task_Item *task = Task_GetTaskAddress(task_id);
     if (key != task->lock_key)

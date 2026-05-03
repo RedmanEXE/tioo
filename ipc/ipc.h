@@ -5,7 +5,7 @@
 #include <settings.h>
 #include <tasks/tasks.h>
 
-#define IPC_CABLEGRAMS_QUEUE_MEMORY_SIZE            1024
+#define IPC_CABLEGRAMS_QUEUE_MEMORY_SIZE            MEM_PAGE_SIZE_IN_BYTES
 #define IPC_SYNCHRONIZERS_MAX_COUNT                 TASKS_MAX_COUNT
 
 typedef struct Lock_KeyObject
@@ -19,7 +19,9 @@ typedef struct Lock_KeyObject
 
 typedef struct
 {
-    uint32_t type;
+    uint16_t sender_id;
+    uint16_t type;
+
     uint32_t data;
 } Cablegram_Item;
 
@@ -29,8 +31,14 @@ typedef struct
     Cablegram_Item *next_write;
 
     Lock_KeyObject key;
+} Cablegrams_QueueHeader;
 
-    Cablegram_Item cablegrams[32];
+typedef struct
+{
+    Cablegrams_QueueHeader header;
+
+    Cablegram_Item cablegrams[(IPC_CABLEGRAMS_QUEUE_MEMORY_SIZE - sizeof(Cablegrams_QueueHeader)) / sizeof(
+                                  Cablegram_Item)];
 } Cablegrams_Queue;
 
 typedef enum

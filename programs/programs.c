@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <mem/mem.h>
 #include <owners/owners.h>
+#include <errors/programs.h>
 
 __attribute__((section(".kernel_bss"))) Program_Item programs[PROGRAMS_MAX_COUNT];
 
@@ -62,7 +63,7 @@ Program_Item *Program_GetProgramAddress(uint16_t program_id)
 int32_t Program_AddTask(uint16_t program_id, void*(* func)(void*), void *arg)
 {
     if (PROGRAMS_MAX_COUNT <= program_id)
-        return -1;
+        return PROGRAM_ERROR_ID_OUT_OF_BOUNDS;
 
     Program_Item *program = Program_GetProgramAddress(program_id);
     int32_t task_id = Task_Create(program->id, func, arg, PROGRAM_DEFAULT_TASK_STACK_SIZE);
@@ -78,7 +79,7 @@ int32_t Program_Execute(void*(* func)(void*), void *arg)
 {
     Program_Item *empty_slot = Program_FindEmptySlot();
     if (NULL == empty_slot)
-        return -1;
+        return PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS;
 
     // Kernel owns cablegrams queue, otherwise program can access this structure and rewrite it
     empty_slot->cablegrams = Memory_Allocate(PROGRAMS_ID_KERNEL, IPC_CABLEGRAMS_QUEUE_MEMORY_SIZE);
@@ -108,7 +109,7 @@ void Program_Initialize(void)
 int32_t Program_Terminate(uint16_t program_id)
 {
     if (PROGRAMS_MAX_COUNT <= program_id)
-        return -1;
+        return PROGRAM_ERROR_ID_OUT_OF_BOUNDS;
 
     // FIXME: Here's might be a bottleneck: this code isn't multicore-safe
     // - Details: if task will be terminated and stack memory block will be allocated to another task -

@@ -16,7 +16,7 @@
 void *Memory_Allocate(uint32_t bytes_len);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Allocates memory for task, that calls this function.
 
 | Parameters | Description                                    |
@@ -32,7 +32,7 @@ void *Memory_Allocate(uint32_t bytes_len);
 void Memory_Free(void *block);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Frees early allocated block of memory.
 
 | Parameters | Description                                     |

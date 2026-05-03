@@ -1,0 +1,7 @@
+#ifndef TIOO_PROGRAM_ERRORS_H_
+#define TIOO_PROGRAM_ERRORS_H_
+
+#define PROGRAM_ERROR_ID_OUT_OF_BOUNDS              (-1)
+#define PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS       (-2)
+
+#endif //TIOO_PROGRAM_ERRORS_H_

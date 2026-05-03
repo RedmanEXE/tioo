@@ -1,6 +1,7 @@
 #include "ipc.h"
 
 #include <stddef.h>
+#include <errors/synchronizers.h>
 
 __attribute__((section(".kernel_bss"))) Synchronizer_Object synchronizers[IPC_SYNCHRONIZERS_MAX_COUNT];
 
@@ -38,6 +39,9 @@ void Synchronizers_Initialize(void)
 
 int32_t Synchronizer_GetResource(uint16_t syncer_id, uint16_t task_id, int32_t timeout)
 {
+    if (IPC_SYNCHRONIZERS_MAX_COUNT <= syncer_id)
+        return SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS;
+
     int32_t result;
     Synchronizer_Object *synchronizer = Synchronizer_GetSynchronizerAddress(syncer_id);
     switch (synchronizer->type)
@@ -49,7 +53,7 @@ int32_t Synchronizer_GetResource(uint16_t syncer_id, uint16_t task_id, int32_t t
             result = Semaphore_GetResource(synchronizer);
             break;
         default:
-            result = -3;
+            result = SYNCHRONIZER_ERROR_WRONG_TYPE;
     }
 
     if (0 > timeout)
@@ -63,6 +67,9 @@ int32_t Synchronizer_GetResource(uint16_t syncer_id, uint16_t task_id, int32_t t
 
 int32_t Synchronizer_ReturnResource(uint16_t syncer_id, uint16_t task_id)
 {
+    if (IPC_SYNCHRONIZERS_MAX_COUNT <= syncer_id)
+        return SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS;
+
     int32_t result;
     Synchronizer_Object *synchronizer = Synchronizer_GetSynchronizerAddress(syncer_id);
     switch (synchronizer->type)
@@ -74,7 +81,7 @@ int32_t Synchronizer_ReturnResource(uint16_t syncer_id, uint16_t task_id)
             result = Semaphore_ReturnResource(synchronizer);
             break;
         default:
-            result = -3;
+            result = SYNCHRONIZER_ERROR_WRONG_TYPE;
     }
 
     if (0 < result)
@@ -85,9 +92,12 @@ int32_t Synchronizer_ReturnResource(uint16_t syncer_id, uint16_t task_id)
 
 int32_t Synchronizer_FreeObject(uint16_t syncer_id)
 {
+    if (IPC_SYNCHRONIZERS_MAX_COUNT <= syncer_id)
+        return SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS;
+
     Synchronizer_Object *synchronizer = Synchronizer_GetSynchronizerAddress(syncer_id);
     if (SYNCHRONIZER_TYPE_NONE == synchronizer->type)
-        return -1;
+        return SYNCHRONIZER_ERROR_OBJECT_IS_ALREADY_FREE;
 
     Lock_OpenAllByKey(&synchronizer->key);
     synchronizer->type = SYNCHRONIZER_TYPE_NONE;

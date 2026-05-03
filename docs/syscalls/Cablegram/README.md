@@ -2,7 +2,7 @@
 
 `Cablegram_` category contains features for programs' messaging. Any program receive CablegramsQueue on creation: something like mailbox.
 This queue can be fetched for new cablegrams by [`Cablegram_Receive`](#Cablegram_Receive).\
-Any mailbox have limits and if program tries send cablegram to the full mailbox, it fails.
+Any mailbox have limits and if program tries to send cablegram to the full mailbox, it fails.
 
 ## Summary
 
@@ -12,6 +12,14 @@ Any mailbox have limits and if program tries send cablegram to the full mailbox,
 | [Cablegram_Receive](#Cablegram_Receive)               | Checks for new cablegrams in the queue.                             |
 | [Cablegram_WaitAndReceive](#Cablegram_WaitAndReceive) | Checks for new cablegrams in the queue, or kicks task to the sleep. |
 
+| Public structures                                     | Short description    |
+|-------------------------------------------------------|----------------------|
+| [Cablegram_Item](#Cablegram_Item)                     | Cablegram structure. |
+
+| Returnable errors                                                                     | Short description          |
+|---------------------------------------------------------------------------------------|----------------------------|
+| [CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS](#CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS) | ID of the unknown program. |
+| [CABLEGRAM_ERROR_QUEUE_IS_FULL](#CABLEGRAM_ERROR_QUEUE_IS_FULL)                       | Receiver's queue is full.  |
 
 ## Public functions
 
@@ -20,13 +28,13 @@ Any mailbox have limits and if program tries send cablegram to the full mailbox,
 void Cablegram_Send(uint16_t receiver_id, Cablegram_Item *in);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Sends cablegram to the queue of the another program. Receiver's queue must have free space or this function fails.
 
-| Parameters  | Description                                                      |
-|-------------|------------------------------------------------------------------|
-| receiver_id | `uint16_t`: ID of the program, that must receive this cablegram. |
-| in          | `Cablegram_Item *`: pointer to the cablegram for sending.        |
+| Parameters  | Description                                                                             |
+|-------------|-----------------------------------------------------------------------------------------|
+| receiver_id | `uint16_t`: ID of the program, that must receive this cablegram.                        |
+| in          | `Cablegram_Item *`: pointer to a [`Cablegram_Item`](#Cablegram_Item) structure to send. |
 
 | Returns             | Description                                                                                      |
 |---------------------|--------------------------------------------------------------------------------------------------|
@@ -38,12 +46,12 @@ void Cablegram_Send(uint16_t receiver_id, Cablegram_Item *in);
 int32_t Cablegram_Receive(Cablegram_Item *out);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Checks for new cablegrams in the queue. If there's any cablegrams, it will be copied in `out` argument.
 
-| Parameters | Description                                                                                           |
-|------------|-------------------------------------------------------------------------------------------------------|
-| out        | `Cablegram_Item *`: pointer to a `Cablegram_Item` structure to be filled with the received cablegram. |
+| Parameters | Description                                                                                                              |
+|------------|--------------------------------------------------------------------------------------------------------------------------|
+| out        | `Cablegram_Item *`: pointer to a [`Cablegram_Item`](#Cablegram_Item) structure to be filled with the received cablegram. |
 
 | Returns             | Description                                                                                      |
 |---------------------|--------------------------------------------------------------------------------------------------|
@@ -55,16 +63,58 @@ int32_t Cablegram_Receive(Cablegram_Item *out);
 int32_t Cablegram_WaitAndReceive(Cablegram_Item *out, int32_t timeout);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Checks for new cablegrams in the queue. If there's any cablegrams, it will be copied in `out` argument.\
   If there's no any cablegrams, task puts in the "sleep" state. To get more information about "sleep" routines, check [`Task_KickIntoSleep`](/docs/syscalls/Task/README.md#Task_KickIntoSleep)
 
 | Parameters | Description                                                                                                                              |
 |------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| out        | `Cablegram_Item *`: pointer to a `Cablegram_Item` structure to be filled with the received cablegram.                                    |
+| out        | `Cablegram_Item *`: pointer to a [`Cablegram_Item`](#Cablegram_Item) structure to be filled with the received cablegram.                 |
 | timeout    | `int32_t`: milliseconds value for "sleep alarm". All positive values sets "alarm", all other values kicks the task to sleep permanently. |
 
 | Returns             | Description                                                                                                  |
 |---------------------|--------------------------------------------------------------------------------------------------------------|
 | `int32_t`           | Count of received cablegrams. `0` - if "sleep alarm" countdown has ended and there's no cablegrams received. |
 | If fails: `int32_t` | If function fails, returnable contains negative value and will depend on the cause of the error.             |
+
+## Public structures
+
+### Cablegram_Item
+```c++
+typedef struct
+{
+    uint16_t sender_id;
+    uint16_t type;
+
+    uint32_t data;
+} Cablegram_Item;
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Cablegram structure.
+
+| Parameters | Description                                                                             |
+|------------|-----------------------------------------------------------------------------------------|
+| sender_id  | `uint16_t`: ID of the program, that send this cablegram. Can be used to send responses. |
+| type       | `uint16_t`: Type of the cablegram.                                                      |
+| data       | `uint32_t`: Data, that's included with cablegram.                                       |
+
+## Returnable errors
+
+### CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS
+```c++
+#define CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS    (-1)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-1`
+- Argument of the function contains ID of the unknown program.
+
+### CABLEGRAM_ERROR_QUEUE_IS_FULL
+```c++
+#define CABLEGRAM_ERROR_QUEUE_IS_FULL               (-2)
+```
+
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
+- Value: `-2`
+- Function cannot be completed successfully, because receiver's cablegrams queue is full.

@@ -1,0 +1,4 @@
+#ifndef TIOO_MEM_ERRORS_H_
+#define TIOO_MEM_ERRORS_H_
+
+#endif //TIOO_MEM_ERRORS_H_

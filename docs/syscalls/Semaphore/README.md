@@ -21,7 +21,7 @@
 uint16_t Semaphore_CreateObject(uint8_t max_count);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Creates a new semaphore object.
 
 | Parameters | Description                                                                      |
@@ -40,7 +40,7 @@ uint16_t Semaphore_CreateObject(uint8_t max_count);
 int32_t Semaphore_GetResource(uint16_t syncer_id, int32_t timeout);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Tries to get resource from the semaphore. If semaphore don't have any free slot, task, that called this function, will be kicked to sleep.
 
 | Parameters | Description                                                                                                                              |
@@ -58,7 +58,7 @@ int32_t Semaphore_GetResource(uint16_t syncer_id, int32_t timeout);
 void Semaphore_ReturnResource(uint16_t syncer_id);
 ```
 
-- **Added** in `1.0.0`
+- **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Returns the resource back to the semaphore. Any task can return resource, even if it doesn't use it.
 
 | Returns             | Description                                                                                      |
