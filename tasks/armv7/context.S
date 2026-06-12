@@ -28,9 +28,9 @@ Platform_CreateTaskContext: // (void *stack_ptr, void *(* func)(void *), void *a
     // Fill up full frame
     sub     r0, r0, #32
     strd    r1, r4, [r0, #24]   // R10, R11
-    strd    r1, r4, [r0, #16]   // R8, R9
+    strd    r1, r3, [r0, #16]   // R8, R9 (data)
     strd    r5, r4, [r0, #8]    // R6 (heap), R7
-    strd    r1, r3, [r0, #0]    // R4, R5 (data)
+    strd    r1, r4, [r0, #0]    // R4, R5
 
     // ...and FPU registers need to be saved
 

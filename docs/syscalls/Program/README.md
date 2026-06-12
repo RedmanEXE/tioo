@@ -45,12 +45,12 @@ uint16_t Program_Execute(void*(* func)(void*), void *arg, void *data, uint32_t h
 - **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Creates a program, and a task for it, which will be in the `LAUNCHED` state.
 
-| Parameters | Description                                                                                                                                                                      |
-|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| func       | `void*(*)(void*)`: a pointer to the main function of program. Code in this function gets in arguments value from `arg` argument, and returns pointer to any value.               |
-| arg        | `void *`: a pointer to any value. This pointer is passed as an argument to the main function.                                                                                    |
-| data       | `void *`: a pointer to the data. This pointer is passed as an PIC registere. **When program will be terminated in the future, this pointer will be freed by kernel!**            |
-| heap_size  | `uint32_t`: requested size of the heap for this program. It will be allocated and freed by kernel, but program can access it too. Heap available from every task of the program. |
+| Parameters | Description                                                                                                                                                                                         |
+|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| func       | `void*(*)(void*)`: a pointer to the main function of program. Code in this function gets in arguments value from `arg` argument, and returns pointer to any value.                                  |
+| arg        | `void *`: a pointer to any value. This pointer is passed as an argument to the main function.                                                                                                       |
+| data       | `void *`: a pointer to the data. This pointer is passed as an PIC register (f.e. R9 on ARMv7). **When program will be terminated in the future, this pointer will be freed by kernel!**             |
+| heap_size  | `uint32_t`: requested size of the heap for this program. It will be allocated and freed by kernel, but program can access it too (f.e. R6 on ARMv7). Heap available from every task of the program. |
 
 | Returns             | Description                                                                                      |
 |---------------------|--------------------------------------------------------------------------------------------------|
