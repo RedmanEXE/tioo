@@ -48,7 +48,7 @@ SECTIONS
 
 	.after :
     {
-        . = ALIGN(4)
+        . = ALIGN(4);
         _after_code = .;
     } >FLASH
 }
