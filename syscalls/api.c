@@ -74,9 +74,9 @@ inline int32_t SysProgram_GetID()
 }
 
 // later
-inline int32_t SysProgram_Terminate(uint16_t program_id)
+inline int32_t SysProgram_Terminate()
 {
-    return (int32_t)Platform_SyscallInvoke(SCN_PROGRAM_TERMINATE, (uint32_t)program_id, 0, 0, 0);
+    return (int32_t)Platform_SyscallInvoke(SCN_PROGRAM_TERMINATE, 0, 0, 0, 0);
 }
 
 // later

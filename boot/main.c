@@ -25,7 +25,7 @@ void *task1_routine(void *arg)
         SysTask_KickIntoSleep(1000);
     }
 
-    SysProgram_Terminate(SysProgram_GetID());
+    SysProgram_Terminate();
 }
 
 void *task2_routine(void *arg)
@@ -40,7 +40,7 @@ void *task2_routine(void *arg)
             SysTask_KickIntoSleep(5000);
     }
 
-    SysProgram_Terminate(SysProgram_GetID());
+    SysProgram_Terminate();
 }
 
 void *task3_routine(void *arg)

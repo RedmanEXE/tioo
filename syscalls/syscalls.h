@@ -40,7 +40,7 @@ void SysMemory_Free(void *block);
 int32_t SysProgram_AddTask(void*(*func)(void*), void *arg);
 int32_t SysProgram_Execute(void*(*func)(void*), void *arg, void *data, uint32_t heap_size);
 int32_t SysProgram_GetID();
-int32_t SysProgram_Terminate(uint16_t program_id);
+int32_t SysProgram_Terminate();
 
 int32_t SysTask_Free(uint16_t task_id);
 int32_t SysTask_GetID();
