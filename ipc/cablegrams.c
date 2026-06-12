@@ -62,6 +62,9 @@ int32_t Cablegram_Send(uint16_t program_id, Cablegram_Item *cablegram)
         return CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS;
 
     Program_Item *program = Program_GetProgramAddress(program_id);
+    if (NULL == program->cablegrams)
+        return CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS;
+
     cablegram->sender_id = program_id;
     if (!CablegramsQueue_AddMessage(program->cablegrams, cablegram))
         return CABLEGRAM_ERROR_QUEUE_IS_FULL;

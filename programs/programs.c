@@ -113,7 +113,10 @@ void Program_Initialize(void)
 {
     uint32_t idx;
     for (idx = 0; idx < PROGRAMS_MAX_COUNT; idx++)
+    {
         programs[idx].id = idx + 1;
+        programs[idx].cablegrams = NULL;
+    }
 }
 
 int32_t Program_Terminate(uint16_t program_id)
