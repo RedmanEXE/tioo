@@ -6,8 +6,8 @@
 
 | Public functions                    | Short description                                        |
 |-------------------------------------|----------------------------------------------------------|
-| [Memory_Allocate](#Memory_Allocate) | Allocates memory for the task, that calls this function. |
-| [Memory_Free](#Memory_Free)         | Frees a previously allocated block of memory.            |
+| [Memory_Allocate](#memory_allocate) | Allocates memory for the task, that calls this function. |
+| [Memory_Free](#memory_free)         | Frees a previously allocated block of memory.            |
 
 ## Public functions
 

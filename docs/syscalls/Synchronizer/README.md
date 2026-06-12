@@ -6,18 +6,18 @@
 
 | Public functions                                            | Short description                                 |
 |-------------------------------------------------------------|---------------------------------------------------|
-| [Synchronizer_FreeObject](#Synchronizer_FreeObject)         | Frees a previously allocated synchronizer object. |
-| [Synchronizer_GetResource](#Synchronizer_GetResource)       | Tries to get resource from the synchronizer.      |
-| [Synchronizer_ReturnResource](#Synchronizer_ReturnResource) | Returns the resource back to the synchronizer.    |
+| [Synchronizer_FreeObject](#synchronizer_freeobject)         | Frees a previously allocated synchronizer object. |
+| [Synchronizer_GetResource](#synchronizer_getresource)       | Tries to get resource from the synchronizer.      |
+| [Synchronizer_ReturnResource](#synchronizer_returnresource) | Returns the resource back to the synchronizer.    |
 
 | Returnable errors                                                                               | Short description                           |
 |-------------------------------------------------------------------------------------------------|---------------------------------------------|
-| [SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS](#SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS)                     | ID of the unknown synchronizer.             |
-| [SYNCHRONIZER_ERROR_THERE_IS_NO_FREE_SLOTS](#SYNCHRONIZER_ERROR_THERE_IS_NO_FREE_SLOTS)         | All synchronizers slots were used.          |
-| [SYNCHRONIZER_ERROR_WRONG_TYPE](#SYNCHRONIZER_ERROR_WRONG_TYPE)                                 | Type of the object is incorrect or unknown. |
-| [SYNCHRONIZER_ERROR_OBJECT_IS_ALREADY_FREE](#SYNCHRONIZER_ERROR_OBJECT_IS_ALREADY_FREE)         | Synchronizer is already free.               |
-| [SYNCHRONIZER_ERROR_RESOURCE_NOT_USED](#SYNCHRONIZER_ERROR_RESOURCE_NOT_USED)                   | Resource is already unused.                 |
-| [SYNCHRONIZER_ERROR_RESOURCE_YOU_ARE_NOT_OWNER](#SYNCHRONIZER_ERROR_RESOURCE_YOU_ARE_NOT_OWNER) | Resource cannot be returned by this task.   |
+| [SYNCHRONIZER_ERROR_ID_OUT_OF_BOUNDS](#synchronizer_error_id_out_of_bounds)                     | ID of the unknown synchronizer.             |
+| [SYNCHRONIZER_ERROR_THERE_IS_NO_FREE_SLOTS](#synchronizer_error_there_is_no_free_slots)         | All synchronizers slots were used.          |
+| [SYNCHRONIZER_ERROR_WRONG_TYPE](#synchronizer_error_wrong_type)                                 | Type of the object is incorrect or unknown. |
+| [SYNCHRONIZER_ERROR_OBJECT_IS_ALREADY_FREE](#synchronizer_error_object_is_already_free)         | Synchronizer is already free.               |
+| [SYNCHRONIZER_ERROR_RESOURCE_NOT_USED](#synchronizer_error_resource_not_used)                   | Resource is already unused.                 |
+| [SYNCHRONIZER_ERROR_RESOURCE_YOU_ARE_NOT_OWNER](#synchronizer_error_resource_you_are_not_owner) | Resource cannot be returned by this task.   |
 
 ## Public functions
 
@@ -80,7 +80,7 @@ void Synchronizer_ReturnResource(uint16_t syncer_id);
 - Value: `-1`
 - Argument of the function contains ID of the unknown synchronizer object.
 
-### PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS
+### SYNCHRONIZER_ERROR_THERE_IS_NO_FREE_SLOTS
 ```c++
 #define SYNCHRONIZER_ERROR_THERE_IS_NO_FREE_SLOTS       (-2)
 ```

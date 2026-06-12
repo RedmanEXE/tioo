@@ -5,14 +5,14 @@
 
 ## Summary
 
-| Public functions                                     | Short description           |
-|------------------------------------------------------|-----------------------------|
-| [Mutex_CreateObject](#Mutex_CreateObject)            | Creates a new mutex object. |
+| Public functions                          | Short description           |
+|-------------------------------------------|-----------------------------|
+| [Mutex_CreateObject](#mutex_createobject) | Creates a new mutex object. |
 
 | Interface functions (private)                 | Short description                       |
 |-----------------------------------------------|-----------------------------------------|
-| [Mutex_GetResource](#Mutex_GetResource)       | Tries to get resource from the mutex.   |
-| [Mutex_ReturnResource](#Mutex_ReturnResource) | Returns the resource back to the mutex. |
+| [Mutex_GetResource](#mutex_getresource)       | Tries to get resource from the mutex.   |
+| [Mutex_ReturnResource](#mutex_returnresource) | Returns the resource back to the mutex. |
 
 ## Public functions
 

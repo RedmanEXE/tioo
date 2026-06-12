@@ -7,12 +7,12 @@
 
 | Public functions                                  | Short description               |
 |---------------------------------------------------|---------------------------------|
-| [Semaphore_CreateObject](#Semaphore_CreateObject) | Creates a new semaphore object. |
+| [Semaphore_CreateObject](#semaphore_createobject) | Creates a new semaphore object. |
 
 | Interface functions (private)                         | Short description                       |
 |-------------------------------------------------------|-----------------------------------------|
-| [Semaphore_GetResource](#Semaphore_GetResource)       | Tries to get resource from the mutex.   |
-| [Semaphore_ReturnResource](#Semaphore_ReturnResource) | Returns the resource back to the mutex. |
+| [Semaphore_GetResource](#semaphore_getresource)       | Tries to get resource from the mutex.   |
+| [Semaphore_ReturnResource](#semaphore_returnresource) | Returns the resource back to the mutex. |
 
 ## Public functions
 

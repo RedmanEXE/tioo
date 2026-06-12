@@ -7,15 +7,15 @@ and **MUST** be used in task management, because all tasks want to be bonded wit
 
 | Public functions                        | Short description                                                      |
 |-----------------------------------------|------------------------------------------------------------------------|
-| [Program_AddTask](#Program_AddTask)     | Adds a task for program, where this function called.                   |
-| [Program_Execute](#Program_Execute)     | Creates a program, and a task for it.                                  |
-| [Program_GetID](#Program_GetID)         | Returns ID of the program, that called this function.                  |
-| [Program_Terminate](#Program_Terminate) | Terminates a program and frees all resources, that this program holds. |
+| [Program_AddTask](#program_addtask)     | Adds a task for program, where this function called.                   |
+| [Program_Execute](#program_execute)     | Creates a program, and a task for it.                                  |
+| [Program_GetID](#program_getid)         | Returns ID of the program, that called this function.                  |
+| [Program_Terminate](#program_terminate) | Terminates a program and frees all resources, that this program holds. |
 
 | Returnable errors                                                               | Short description            |
 |---------------------------------------------------------------------------------|------------------------------|
-| [PROGRAM_ERROR_ID_OUT_OF_BOUNDS](#PROGRAM_ERROR_ID_OUT_OF_BOUNDS)               | ID of the unknown program.   |
-| [PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS](#PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS) | All program slots were used. |
+| [PROGRAM_ERROR_ID_OUT_OF_BOUNDS](#program_error_id_out_of_bounds)               | ID of the unknown program.   |
+| [PROGRAM_ERROR_THERE_IS_NO_EMPTY_SLOTS](#program_error_there_is_no_empty_slots) | All program slots were used. |
 
 ## Public functions
 
@@ -39,16 +39,18 @@ uint16_t Program_AddTask(void*(* func)(void*), void *arg);
 
 ### Program_Execute
 ```c++
-uint16_t Program_Execute(void*(* func)(void*), void *arg);
+uint16_t Program_Execute(void*(* func)(void*), void *arg, void *data, uint32_t heap_size);
 ```
 
 - **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Creates a program, and a task for it, which will be in the `LAUNCHED` state.
 
-| Parameters | Description                                                                                                                                                        |
-|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| func       | `void*(*)(void*)`: a pointer to the main function of program. Code in this function gets in arguments value from `arg` argument, and returns pointer to any value. |
-| arg        | `void *`: a pointer to any value. This pointer is passed as an argument to the main function.                                                                      |
+| Parameters | Description                                                                                                                                                                      |
+|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| func       | `void*(*)(void*)`: a pointer to the main function of program. Code in this function gets in arguments value from `arg` argument, and returns pointer to any value.               |
+| arg        | `void *`: a pointer to any value. This pointer is passed as an argument to the main function.                                                                                    |
+| data       | `void *`: a pointer to the data. This pointer is passed as an PIC registere. **When program will be terminated in the future, this pointer will be freed by kernel!**            |
+| heap_size  | `uint32_t`: requested size of the heap for this program. It will be allocated and freed by kernel, but program can access it too. Heap available from every task of the program. |
 
 | Returns             | Description                                                                                      |
 |---------------------|--------------------------------------------------------------------------------------------------|

@@ -6,18 +6,18 @@
 
 | Public functions                          | Short description                                                |
 |-------------------------------------------|------------------------------------------------------------------|
-| [Task_Free](#Task_Free)                   | Frees task and its stack.                                        |
-| [Task_GetID](#Task_GetID)                 | Returns ID of the task, that called this function.               |
-| [Task_KickIntoSleep](#Task_KickIntoSleep) | Puts task into "sleep" for the specified number of milliseconds. |
-| [Task_Kill](#Task_Kill)                   | Kills task (aka sets task state to `SUSPENDED` value).           |
-| [Task_Launch](#Task_Launch)               | Sets task state to `LAUNCHED` value.                             |
+| [Task_Free](#task_free)                   | Frees task and its stack.                                        |
+| [Task_GetID](#task_getid)                 | Returns ID of the task, that called this function.               |
+| [Task_KickIntoSleep](#task_kickintosleep) | Puts task into "sleep" for the specified number of milliseconds. |
+| [Task_Kill](#task_kill)                   | Kills task (aka sets task state to `SUSPENDED` value).           |
+| [Task_Launch](#task_launch)               | Sets task state to `LAUNCHED` value.                             |
 
 | Returnable errors                                                         | Short description                                         |
 |---------------------------------------------------------------------------|-----------------------------------------------------------|
-| [TASK_ERROR_ID_OUT_OF_BOUNDS](#TASK_ERROR_ID_OUT_OF_BOUNDS)               | ID of the unknown task.                                   |
-| [TASK_ERROR_THERE_IS_NO_EMPTY_SLOTS](#TASK_ERROR_THERE_IS_NO_EMPTY_SLOTS) | All tasks slots were used.                                |
-| [TASK_ERROR_TASK_IS_LAUNCHED](#TASK_ERROR_TASK_IS_LAUNCHED)               | Task is launched, but function requires another state.    |
-| [TASK_ERROR_TASK_IS_NOT_LAUNCHED](#TASK_ERROR_TASK_IS_NOT_LAUNCHED)       | Task isn't launched, but function requires another state. |
+| [TASK_ERROR_ID_OUT_OF_BOUNDS](#task_error_id_out_of_bounds)               | ID of the unknown task.                                   |
+| [TASK_ERROR_THERE_IS_NO_EMPTY_SLOTS](#task_error_there_is_no_empty_slots) | All tasks slots were used.                                |
+| [TASK_ERROR_TASK_IS_LAUNCHED](#task_error_task_is_launched)               | Task is launched, but function requires another state.    |
+| [TASK_ERROR_TASK_IS_NOT_LAUNCHED](#task_error_task_is_not_launched)       | Task isn't launched, but function requires another state. |
 
 ## Public functions
 
@@ -77,7 +77,7 @@ void Task_Kill(uint16_t task_id);
 ```
 
 - **Added** in [`1.0.0`](/docs/versions/README.md#100)
-- Kills task (aka sets task state to `SUSPENDED` value). To launch it again, use [`Task_Launch`](#Task_Launch) function.\
+- Kills task (aka sets task state to `SUSPENDED` value). To launch it again, use [`Task_Launch`](#yask_launch) function.\
   When killed, task saves their state: if task will be launched again, it continues runtime from previous place in the code.
 - **Task must be in `LAUNCHED` or `RUNNING` launch states!**
 

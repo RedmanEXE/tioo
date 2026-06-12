@@ -1,25 +1,25 @@
 # Cablegram
 
 `Cablegram_` category contains features for programs' messaging. Any program receive CablegramsQueue on creation: something like mailbox.
-This queue can be fetched for new cablegrams by [`Cablegram_Receive`](#Cablegram_Receive).\
+This queue can be fetched for new cablegrams by [`Cablegram_Receive`](#cablegram_receive).\
 Any mailbox have limits and if program tries to send cablegram to the full mailbox, it fails.
 
 ## Summary
 
 | Public functions                                      | Short description                                                   |
 |-------------------------------------------------------|---------------------------------------------------------------------|
-| [Cablegram_Send](#Cablegram_Send)                     | Sends cablegram to the queue of the another program.                |
-| [Cablegram_Receive](#Cablegram_Receive)               | Checks for new cablegrams in the queue.                             |
-| [Cablegram_WaitAndReceive](#Cablegram_WaitAndReceive) | Checks for new cablegrams in the queue, or kicks task to the sleep. |
+| [Cablegram_Send](#cablegram_send)                     | Sends cablegram to the queue of the another program.                |
+| [Cablegram_Receive](#cablegram_receive)               | Checks for new cablegrams in the queue.                             |
+| [Cablegram_WaitAndReceive](#cablegram_waitandreceive) | Checks for new cablegrams in the queue, or kicks task to the sleep. |
 
-| Public structures                                     | Short description    |
-|-------------------------------------------------------|----------------------|
-| [Cablegram_Item](#Cablegram_Item)                     | Cablegram structure. |
+| Public structures                 | Short description    |
+|-----------------------------------|----------------------|
+| [Cablegram_Item](#cablegram_item) | Cablegram structure. |
 
 | Returnable errors                                                                     | Short description          |
 |---------------------------------------------------------------------------------------|----------------------------|
-| [CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS](#CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS) | ID of the unknown program. |
-| [CABLEGRAM_ERROR_QUEUE_IS_FULL](#CABLEGRAM_ERROR_QUEUE_IS_FULL)                       | Receiver's queue is full.  |
+| [CABLEGRAM_ERROR_PROGRAM_ID_OUT_OF_BOUNDS](#cablegram_error_program_id_out_of_bounds) | ID of the unknown program. |
+| [CABLEGRAM_ERROR_QUEUE_IS_FULL](#cablegram_error_queue_is_full)                       | Receiver's queue is full.  |
 
 ## Public functions
 
@@ -51,7 +51,7 @@ int32_t Cablegram_Receive(Cablegram_Item *out);
 
 | Parameters | Description                                                                                                              |
 |------------|--------------------------------------------------------------------------------------------------------------------------|
-| out        | `Cablegram_Item *`: pointer to a [`Cablegram_Item`](#Cablegram_Item) structure to be filled with the received cablegram. |
+| out        | `Cablegram_Item *`: pointer to a [`Cablegram_Item`](#cablegram_item) structure to be filled with the received cablegram. |
 
 | Returns             | Description                                                                                      |
 |---------------------|--------------------------------------------------------------------------------------------------|
@@ -65,11 +65,11 @@ int32_t Cablegram_WaitAndReceive(Cablegram_Item *out, int32_t timeout);
 
 - **Added** in [`1.0.0`](/docs/versions/README.md#100)
 - Checks for new cablegrams in the queue. If there's any cablegrams, it will be copied in `out` argument.\
-  If there's no any cablegrams, task puts in the "sleep" state. To get more information about "sleep" routines, check [`Task_KickIntoSleep`](/docs/syscalls/Task/README.md#Task_KickIntoSleep)
+  If there's no any cablegrams, task puts in the "sleep" state. To get more information about "sleep" routines, check [`Task_KickIntoSleep`](/docs/syscalls/Task/README.md#task_kickintosleep)
 
 | Parameters | Description                                                                                                                              |
 |------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| out        | `Cablegram_Item *`: pointer to a [`Cablegram_Item`](#Cablegram_Item) structure to be filled with the received cablegram.                 |
+| out        | `Cablegram_Item *`: pointer to a [`Cablegram_Item`](#cablegram_item) structure to be filled with the received cablegram.                 |
 | timeout    | `int32_t`: milliseconds value for "sleep alarm". All positive values sets "alarm", all other values kicks the task to sleep permanently. |
 
 | Returns             | Description                                                                                                  |
