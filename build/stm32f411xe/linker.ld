@@ -14,12 +14,11 @@ SECTIONS
 	{
 		KEEP(*(.isr_vector))
 
-		*(.text)
-		*(.text.*)
-		_sidata = .;
-		*(.rodata)
+		*(.text .text.*)
+		*(.rodata .rodata.*)
 
 		. = ALIGN(4);
+		_sidata = .;
 	} >FLASH
 
 	.data :
@@ -28,9 +27,7 @@ SECTIONS
 	    _sdata = .;
 
 	    *(.kernel_data)
-
-	    *(.data)
-	    *(.data*)
+	    *(.data .data.*)
 
 	    . = ALIGN(4);
 	    _edata = .;
@@ -42,12 +39,16 @@ SECTIONS
 	    _sbss = .;
 
 	    *(.kernel_bss)
-
-	    *(.bss)
-	    *(.bss*)
+	    *(.bss .bss.*)
         *(COMMON)
 
         . = ALIGN(4);
         _ebss = .;
 	} >RAM
+
+	.after :
+    {
+        . = ALIGN(4)
+        _after_code = .;
+    } >FLASH
 }
