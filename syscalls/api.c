@@ -25,7 +25,7 @@ inline void SysMemory_Free(void *block);
 inline int32_t SysProgram_AddTask(void*(*func)(void*), void* arg);
 inline int32_t SysProgram_Execute(void*(*func)(void*), void *arg, void *data, uint32_t heap_size);
 inline int32_t SysProgram_GetID();
-inline int32_t SysProgram_Terminate(uint16_t program_id);
+inline int32_t SysProgram_Terminate();
 
 inline int32_t SysTask_Free(uint16_t task_id);
 inline int32_t SysTask_GetID();
