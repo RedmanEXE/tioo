@@ -37,15 +37,15 @@ typedef enum
 void *SysMemory_Allocate(uint32_t bytes_len);
 void SysMemory_Free(void *block);
 
-int32_t SysProgram_AddTask(void*(*func)(void*), void* arg);
-int32_t SysProgram_Execute(void*(*func)(void*), void *arg);
+int32_t SysProgram_AddTask(void*(*func)(void*), void *arg);
+int32_t SysProgram_Execute(void*(*func)(void*), void *arg, void *data, uint32_t heap_size);
 int32_t SysProgram_GetID();
 int32_t SysProgram_Terminate(uint16_t program_id);
 
 int32_t SysTask_Free(uint16_t task_id);
 int32_t SysTask_GetID();
 int32_t SysTask_KickIntoSleep(int32_t sleep_time);
-int32_t SysTask_Kick(uint16_t task_id);
+int32_t SysTask_Kill(uint16_t task_id);
 int32_t SysTask_Launch(uint16_t task_id);
 
 int32_t SysCablegram_Send(uint16_t receiver_id, Cablegram_Item *in);

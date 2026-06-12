@@ -66,7 +66,7 @@ int32_t Program_AddTask(uint16_t program_id, void*(* func)(void*), void *arg)
         return PROGRAM_ERROR_ID_OUT_OF_BOUNDS;
 
     Program_Item *program = Program_GetProgramAddress(program_id);
-    int32_t task_id = Task_Create(program->id, func, arg, PROGRAM_DEFAULT_TASK_STACK_SIZE);
+    int32_t task_id = Task_Create(program->id, func, arg, PROGRAM_DEFAULT_TASK_STACK_SIZE, program->data, program->heap);
     Task_Item *task = Task_GetTaskAddress(task_id);
     Program_AddTaskToQueue(program, task);
 
@@ -75,7 +75,7 @@ int32_t Program_AddTask(uint16_t program_id, void*(* func)(void*), void *arg)
     return task_id;
 }
 
-int32_t Program_Execute(void*(* func)(void*), void *arg)
+int32_t Program_Execute(void*(* func)(void*), void *arg, void *data, uint32_t heap_size)
 {
     Program_Item *empty_slot = Program_FindEmptySlot();
     if (NULL == empty_slot)
@@ -85,7 +85,17 @@ int32_t Program_Execute(void*(* func)(void*), void *arg)
     empty_slot->cablegrams = Memory_Allocate(PROGRAMS_ID_KERNEL, IPC_CABLEGRAMS_QUEUE_MEMORY_SIZE);
     CablegramsQueue_Initialize(empty_slot->cablegrams);
 
-    int32_t task_id = Task_Create(empty_slot->id, func, arg, PROGRAM_DEFAULT_TASK_STACK_SIZE);
+    // Allocate heap for the program
+    if (0 < heap_size)
+    {
+        void *heap_ptr = Memory_Allocate(empty_slot->id, heap_size);
+        empty_slot->heap = heap_ptr;
+    } else
+        empty_slot->heap = NULL;
+    // And save data ptr
+    empty_slot->data = data;
+
+    int32_t task_id = Task_Create(empty_slot->id, func, arg, PROGRAM_DEFAULT_TASK_STACK_SIZE, empty_slot->data, empty_slot->heap);
     Task_Item *task = Task_GetTaskAddress(task_id);
     Program_AddTaskToQueue(empty_slot, task);
 
@@ -128,6 +138,9 @@ int32_t Program_Terminate(uint16_t program_id)
     program->last_task = NULL;
 
     // TODO: Free program's data memory
+
+    Memory_Free(program->id, program->data);
+    Memory_Free(program->id, program->heap);
 
     Memory_Free(PROGRAMS_ID_KERNEL, program->cablegrams);
     program->cablegrams = NULL;

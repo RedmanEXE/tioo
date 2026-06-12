@@ -6,7 +6,7 @@
 #include <owners/owners.h>
 #include <errors/tasks.h>
 
-extern void *Platform_CreateTaskContext(void *stack_ptr, void *(*func)(void *), void *arg, uint32_t create_with_extras);
+extern void *Platform_CreateTaskContext(void *stack_ptr, void *(*func)(void *), void *arg, void *data, void *heap);
 extern void Platform_CreateMemoryProtectionContext(Platform_TaskData *zone);
 extern void Platform_ScheduleTaskSwitch();
 
@@ -54,7 +54,7 @@ void Task_SwapStates(Task_Item *task)
     task->post_state = state;
 }
 
-int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint32_t stack_size)
+int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint32_t stack_size, void *data, void *heap)
 {
     Task_Item *task = Task_FindFirstFreeStruct();
     if (NULL == task)
@@ -70,7 +70,7 @@ int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint3
     // TODO: Create MPU/PMP setup
     // Platform_CreateMemoryProtectionContext(&task->platform_data);
 
-    task->stack_ptr = Platform_CreateTaskContext(stack_ptr, func, arg, tasks_manager.curr_task != NULL);
+    task->stack_ptr = Platform_CreateTaskContext(stack_ptr, func, arg, data, heap);
     task->launch_state = TASK_LAUNCH_STATE_SUSPENDED;
 
     TasksManager_AddToQueue(&tasks_manager, task);

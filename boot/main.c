@@ -83,10 +83,10 @@ int Kernel_EntryPoint(void)
     // *cmoder &= ~(0xFU << 20);
     // *cmoder |= 0x3U << 20;
 
-    Program_Execute(task1_routine, (void *)1);
-    uint16_t program_id = Program_Execute(task3_routine, (void *)2);
+    Program_Execute(task1_routine, (void *)1, (void *)11, 1024);
+    uint16_t program_id = Program_Execute(task3_routine, (void *)2, (void *)12, 1024);
     Program_AddTask(program_id, task2_routine, (void *)3);
-    Program_Execute(task3_routine, (void *)4);
+    Program_Execute(task3_routine, (void *)4, (void *)13, 1024);
     // END: Test field
 
     SystemTimer_InitializeForTaskSwitching();

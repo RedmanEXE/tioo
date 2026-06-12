@@ -36,7 +36,7 @@ uint32_t Kernel_Syscalls(
 		case SCN_PROGRAM_ADD_TASK:
 			return (uint32_t)Program_AddTask(Owner_GetActiveTaskProgramID(), (void *(*)(void *))arg0, (void *)arg1);
 		case SCN_PROGRAM_EXECUTE:
-			return (uint32_t)Program_Execute((void *(*)(void *)) arg0, (void *)arg1);
+			return (uint32_t)Program_Execute((void *(*)(void *)) arg0, (void *)arg1, (void *)arg2, arg3);
 		case SCN_PROGRAM_GET_ID:
 			return (uint32_t)Program_GetID();
 		case SCN_PROGRAM_TERMINATE:

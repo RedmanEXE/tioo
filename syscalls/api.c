@@ -23,14 +23,14 @@ inline void *SysMemory_Allocate(uint32_t bytes_len);
 inline void SysMemory_Free(void *block);
 
 inline int32_t SysProgram_AddTask(void*(*func)(void*), void* arg);
-inline int32_t SysProgram_Execute(void*(*func)(void*), void *arg);
+inline int32_t SysProgram_Execute(void*(*func)(void*), void *arg, void *data, uint32_t heap_size);
 inline int32_t SysProgram_GetID();
 inline int32_t SysProgram_Terminate(uint16_t program_id);
 
 inline int32_t SysTask_Free(uint16_t task_id);
 inline int32_t SysTask_GetID();
 inline int32_t SysTask_KickIntoSleep(int32_t sleep_time);
-inline int32_t SysTask_Kick(uint16_t task_id);
+inline int32_t SysTask_Kill(uint16_t task_id);
 inline int32_t SysTask_Launch(uint16_t task_id);
 
 inline int32_t SysCablegram_Send(uint16_t receiver_id, Cablegram_Item *in);
@@ -62,9 +62,9 @@ inline int32_t SysProgram_AddTask(void*(*func)(void*), void* arg)
 }
 
 // later
-inline int32_t SysProgram_Execute(void*(*func)(void*), void *arg)
+inline int32_t SysProgram_Execute(void*(*func)(void*), void *arg, void *data, uint32_t heap_size)
 {
-    return (int32_t)Platform_SyscallInvoke(SCN_PROGRAM_EXECUTE, (uint32_t)func, (uint32_t)arg, 0, 0);
+    return (int32_t)Platform_SyscallInvoke(SCN_PROGRAM_EXECUTE, (uint32_t)func, (uint32_t)arg, (uint32_t)data, (uint32_t)heap_size);
 }
 
 // later

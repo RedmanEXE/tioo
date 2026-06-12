@@ -15,10 +15,19 @@ Platform_PendSVHandler: // aka Platform_ContextSwitch
     // We need to save:
     // - R4-R11
     // - S16-S31, if FPU in use
-    mrs     r0, psp
-    stmdb   r0!, {r4-r11}
-    // vstmdb  r0!, {s16-s31}
+    mrs     r1, psp
 
+    // Before save, check that it is not first switch
+    push    {r1}
+    bl      TasksManager_IsCurrentTaskNullable
+    pop     {r1}
+    tst     r0, r0
+        bne     .SkipContextSave
+    stmdb   r1!, {r4-r11}
+    // vstmdb  r0!, {s16-s31}
+.SkipContextSave:
+
+    mov     r0, r1
     // Then call switcher and give them stack pointer
     // to save into Task structure
     bl      TasksManager_Switch

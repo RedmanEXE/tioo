@@ -3,8 +3,8 @@
 
 .type       Platform_CreateTaskContext, %function
 .global     Platform_CreateTaskContext
-Platform_CreateTaskContext: // (void *stack_ptr, void *(* func)(void *), void *arg, uint32_t create_with_extras);
-    push    {r4}
+Platform_CreateTaskContext: // (void *stack_ptr, void *(* func)(void *), void *arg, void *data, void *heap);
+    push    {r4, r5}
     // Align stack by 8
     bic     r0, r0, #7
 
@@ -22,19 +22,20 @@ Platform_CreateTaskContext: // (void *stack_ptr, void *(* func)(void *), void *a
     strd    r4, r1, [r0, #8]   // R3, R2
     strd    r2, r4, [r0, #0]   // R1, R0 (arg)
 
-    tst     r3, r3
-        beq     .SkipExtrasAdd
+    // Load heap pointer into R5
+    ldr     r5, [sp, #8]
 
+    // Fill up full frame
     sub     r0, r0, #32
     strd    r1, r4, [r0, #24]   // R10, R11
     strd    r1, r4, [r0, #16]   // R8, R9
-    strd    r1, r4, [r0, #8]    // R6, R7
-    strd    r1, r4, [r0, #0]    // R4, R5
-.SkipExtrasAdd:
+    strd    r5, r4, [r0, #8]    // R6 (heap), R7
+    strd    r1, r3, [r0, #0]    // R4, R5 (data)
+
     // ...and FPU registers need to be saved
 
     // and return r0 as stack_ptr
-    pop     {r4}
+    pop     {r5, r4}
     bx      lr
 
 .type       Platform_ChangeCurrentContextPointer, %function

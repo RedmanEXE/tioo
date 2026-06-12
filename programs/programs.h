@@ -20,6 +20,9 @@ typedef struct
 
     Cablegrams_Queue *cablegrams;
 
+    void *heap;
+    void *data;
+
     Task_Item *first_task;
     Task_Item *last_task;
 } Program_Item;
@@ -28,7 +31,7 @@ extern Program_Item programs[PROGRAMS_MAX_COUNT];
 
 Program_Item *Program_GetProgramAddress(uint16_t program_id);
 int32_t Program_AddTask(uint16_t program_id, void*(*func)(void*), void* arg);
-int32_t Program_Execute(void*(*func)(void*), void* arg);
+int32_t Program_Execute(void*(*func)(void*), void* arg, void *data, uint32_t heap_size);
 void Program_Initialize(void);
 int32_t Program_GetID();
 int32_t Program_Terminate(uint16_t id);

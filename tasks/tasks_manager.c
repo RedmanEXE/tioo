@@ -36,12 +36,6 @@ void TasksManager_AddToQueue(TasksManager *manager, Task_Item *task_to_add)
     else
         manager->last_task = task_to_add;
 
-    if (NULL == manager->curr_task)
-    {
-        manager->curr_task = task_to_add;
-        Platform_ChangeCurrentContextPointer(task_to_add->stack_ptr);
-    }
-
     task_to_add->prev_for_switcher = manager->last_task;
     task_to_add->next_for_switcher = manager->first_task;
     manager->last_task = task_to_add;
@@ -100,13 +94,25 @@ void TasksManager_Initialize(void)
 
 void *TasksManager_Switch(void *sp_to_save)
 {
-    Task_Item *task = TasksManager_FindNextTask(tasks_manager.curr_task);
-
-    tasks_manager.curr_task->stack_ptr = sp_to_save;
-    Task_SwapStates(tasks_manager.curr_task);
+    Task_Item *task = tasks_manager.first_task;
+    if (NULL == tasks_manager.curr_task)
+    {
+        tasks_manager.curr_task = tasks_manager.first_task;
+        Platform_ChangeCurrentContextPointer(tasks_manager.first_task->stack_ptr);
+    } else
+    {
+        task = TasksManager_FindNextTask(tasks_manager.curr_task);
+        tasks_manager.curr_task->stack_ptr = sp_to_save;
+        Task_SwapStates(tasks_manager.curr_task);
+    }
 
     tasks_manager.curr_task = task;
     Task_SwapStates(task);
     task->launch_state = TASK_LAUNCH_STATE_RUNNING;
     return tasks_manager.curr_task->stack_ptr;
+}
+
+int TasksManager_IsCurrentTaskNullable()
+{
+    return (NULL == tasks_manager.curr_task);
 }

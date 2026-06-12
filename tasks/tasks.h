@@ -50,7 +50,7 @@ typedef struct
 extern Task_Item tasks[TASKS_MAX_COUNT];
 extern TasksManager tasks_manager;
 
-int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint32_t stack_size);
+int32_t Task_Create(uint16_t program_id, void *(*func)(void *), void *arg, uint32_t stack_size, void *data, void *heap);
 int32_t Task_Launch(uint16_t task_id);
 int32_t Task_Kill(uint16_t id);
 int32_t Task_Free(uint16_t task_id);
